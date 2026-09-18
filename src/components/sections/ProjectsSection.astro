@@ -1,0 +1,59 @@
+---
+import portfolioData from '../../data/portfolio.json';
+import ProjectCard from '../ui/ProjectCard';
+
+const { projects } = portfolioData;
+const featuredProjects = projects.filter((project) => project.featured);
+const studyProjects = projects.filter((project) => !project.featured);
+---
+
+<section class="px-6 py-[var(--spacing-section)]" id="projects">
+  <div class="mx-auto max-w-6xl">
+    <!-- Section label -->
+    <p class="mb-4 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">Projects</p>
+    <h2 class="mb-12 text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+      만들고 있는 것들
+    </h2>
+
+    <div class="space-y-5">
+      {featuredProjects.map((project) => (
+        <div>
+          <ProjectCard
+            client:visible={{ rootMargin: '200px' }}
+            title={project.title}
+            description={project.description}
+            category={project.category}
+            thumbnail={project.thumbnail}
+            thumbnailPosition={project.thumbnailPosition as 'center' | 'top'}
+            tags={project.tags}
+            liveUrl={project.links.live || undefined}
+            githubUrl={project.links.github || undefined}
+            secondaryUrl={project.links.secondary || undefined}
+            secondaryLabel={project.links.secondaryLabel || undefined}
+            isFeatured={project.featured}
+          />
+        </div>
+      ))}
+    </div>
+
+    {studyProjects.length > 0 && (
+      <div class="mt-5 grid grid-cols-1 gap-[var(--spacing-bento-gap)] md:grid-cols-2">
+        {studyProjects.map((project) => (
+          <ProjectCard
+            client:visible={{ rootMargin: '200px' }}
+            title={project.title}
+            description={project.description}
+            category={project.category}
+            thumbnail={project.thumbnail}
+            thumbnailPosition={project.thumbnailPosition as 'center' | 'top'}
+            tags={project.tags}
+            liveUrl={project.links.live || undefined}
+            githubUrl={project.links.github || undefined}
+            secondaryUrl={project.links.secondary || undefined}
+            secondaryLabel={project.links.secondaryLabel || undefined}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+</section>

@@ -1,0 +1,49 @@
+---
+import portfolioData from '../../data/portfolio.json';
+import AnimatedBentoCard from '../ui/AnimatedBentoCard';
+
+const { skills } = portfolioData;
+
+const iconMap: Record<string, string> = {
+  brain: '🧠',
+  database: '🗄️',
+  cloud: '☁️',
+  users: '👥',
+};
+---
+
+<section class="px-6 py-[var(--spacing-section)]" id="skills">
+  <div class="mx-auto max-w-6xl">
+    <!-- Section label -->
+    <p class="mb-4 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">Skills</p>
+    <h2 class="mb-12 text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+      목적 중심의 기술 스택
+    </h2>
+
+    <!-- Bento Grid -->
+    <div class="grid grid-cols-1 gap-[var(--spacing-bento-gap)] sm:grid-cols-2 lg:grid-cols-4">
+      {skills.map((skill, index) => (
+        <AnimatedBentoCard client:visible delay={index * 0.1}>
+          <div class="group h-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-6 shadow-[0_8px_28px_rgba(42,39,94,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-border-hover)] hover:bg-[var(--color-bg-card-hover)] hover:shadow-[0_16px_36px_rgba(42,39,94,0.09)]">
+            <!-- Icon -->
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--color-accent-subtle)] text-2xl transition-transform duration-300 group-hover:scale-105">
+              {iconMap[skill.icon] || '⚡'}
+            </div>
+            <!-- Category -->
+            <h3 class="mb-2 text-base font-bold text-[var(--color-text-primary)]">{skill.category}</h3>
+            <!-- Description -->
+            <p class="mb-4 text-sm leading-relaxed text-[var(--color-text-tertiary)]">{skill.description}</p>
+            <!-- Items -->
+            <div class="flex flex-wrap gap-1.5">
+              {skill.items.map((item) => (
+                <span class="rounded-md bg-[var(--color-bg-secondary)] px-2.5 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        </AnimatedBentoCard>
+      ))}
+    </div>
+  </div>
+</section>
