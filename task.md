@@ -115,8 +115,8 @@
 ### 9-2. GitHub 저장소 연결
 - [x] GitHub에 `Sondanha/dana-portfolio` 저장소 생성
 - [x] GitHub SSH 원격 저장소를 `origin`으로 등록
-- [ ] `main` 브랜치 push
-- [ ] GitHub에서 소스 파일과 커밋이 정상 반영됐는지 확인
+- [x] `main` 브랜치 push
+- [x] GitHub에서 소스 파일과 커밋이 정상 반영됐는지 확인
 - [ ] 브랜치 보호나 Dependabot 등 필요한 저장소 설정 검토
 
 > 주의: 저장소 공개 여부와 이름은 사용자 확인 후 결정한다. 토큰·키·개인 환경파일은 절대 커밋하지 않는다.
