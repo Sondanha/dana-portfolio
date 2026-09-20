@@ -167,6 +167,7 @@
 ### 11-1. 보안 점검 및 강화
 
 - [x] 문의 폼과 `/api/contact` 서버 함수 제거
+- [x] 정적 `404.html`을 추가해 제거된 API와 미등록 경로가 성공 응답으로 폴백되지 않도록 처리
 - [x] Astro 7 보안 패치 버전으로 업그레이드
 - [x] Astro CSP 해시 및 외부 폰트 출처 제한 적용
 - [x] Cloudflare `_headers`에 HSTS, 클릭재킹 방지, MIME 스니핑 방지, Referrer 및 Permissions Policy 적용
