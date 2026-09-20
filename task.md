@@ -54,14 +54,15 @@
 ### 7-5. Contact Me 독립 페이지 추가
 - [x] 페이지 하단에는 2열 Contact CTA만 배치
 - [x] Header와 하단 CTA에서 `/contact` 페이지로 이동
-- [x] Contact 폼을 전체 화면 독립 페이지로 분리
-- [x] `문의 남기기` / `이메일 주소` 탭 전환 시 박스 높이 고정
+- [x] Contact를 전체 화면 독립 페이지로 분리
 - [x] 클립보드 기반 이메일 주소 복사 CTA
+- [x] 기본 메일 앱을 여는 `mailto:` 링크
 - [x] `portfolio.json` contact 필드 추가
 - [x] Header를 대형 DH 로고 + 좌측 메뉴 + 우측 `Contact Me!` CTA 구조로 재설계
-- [x] Contact를 `문의 남기기` / `이메일 주소` 탭 UI로 재구성
-- [x] `/api/contact` Pages Function과 Resend 연동 코드 추가
-- [ ] Cloudflare Pages에 `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, 선택적 `CONTACT_FROM_EMAIL` 설정 후 실메일 검증
+- [x] 문의 입력 폼과 Resend 연동 계획 제거
+- [x] `/api/contact` Pages Function과 `public/_routes.json` 제거
+
+> Contact는 별도 서버 함수나 외부 메일 API 없이 공개 이메일 주소의 복사 및 `mailto:` 연결만 제공한다. 입력값을 받는 엔드포인트가 없어 스팸·남용과 비밀키 관리 부담을 줄였다.
 
 ### 7-6. 썸네일 이미지 생성 (AI 생성 이미지)
 **스타일 가이드 (초기 생성 이미지):**
@@ -134,34 +135,58 @@
 ## Phase 10: Cloudflare Pages 배포
 
 ### 10-1. Cloudflare Pages 프로젝트 생성
-- [ ] Cloudflare 계정에서 GitHub 연동 권한 확인
-- [ ] Phase 9에서 생성한 GitHub 저장소를 Cloudflare Pages에 연결
-- [ ] Production branch를 `main`으로 설정
-- [ ] Framework preset을 Astro로 설정
-- [ ] Build command를 `npm run build`로 설정
-- [ ] Build output directory를 `dist`로 설정
-- [ ] 필요한 경우 Node.js 버전을 Cloudflare 환경변수로 고정
-- [ ] 정적 사이트이므로 불필요한 Astro 서버 어댑터를 추가하지 않음
+- [x] Cloudflare 계정에서 GitHub 연동 권한 확인
+- [x] GitHub 저장소 `Sondanha/dana-portfolio`를 Cloudflare Pages에 연결
+- [x] Production branch를 `main`으로 설정
+- [x] Astro 정적 빌드 설정 완료
+- [x] Build command를 `npm run build`로 설정
+- [x] Build output directory를 `dist`로 설정
+- [x] `.node-version`으로 Cloudflare 빌드 Node.js 버전 고정
+- [x] 정적 사이트이므로 불필요한 Astro 서버 어댑터를 추가하지 않음
 
 ### 10-2. 첫 프로덕션 배포
-- [ ] 첫 배포 로그에서 의존성 설치와 Astro 빌드 성공 확인
-- [ ] Cloudflare가 발급한 실제 `*.pages.dev` 주소 기록
-- [ ] 실제 주소가 기존 가정값 `https://sondanha.pages.dev`와 다른 경우 전체 URL 설정 수정
-- [ ] URL 수정 커밋을 push하고 재배포 확인
+- [x] Cloudflare Pages 프로덕션 배포 성공
+- [x] 실제 주소 `https://sondanha.pages.dev` 기록 및 HTTP 200 확인
+- [x] Astro의 `site`, sitemap, robots 설정을 실제 배포 주소와 일치시킴
+- [x] GitHub `main` push 후 자동 재배포 확인
 - [ ] 필요 시 커스텀 도메인 연결 및 DNS/HTTPS 활성화 확인
 
 ---
 
 ## Phase 11: 배포 후 검증·자동 배포 확인
 
-- [ ] 프로덕션 홈 화면이 HTTP 200으로 응답하는지 확인
+- [x] 프로덕션 홈 화면이 HTTP 200으로 응답하는지 확인
 - [ ] CSS, React Islands 애니메이션, 모바일 메뉴가 배포 환경에서 정상 동작하는지 확인
 - [ ] 프로젝트 이미지, favicon, OG 이미지, sitemap, `robots.txt`가 정상 제공되는지 확인
 - [ ] 이메일·GitHub·Velog 및 프로젝트 외부 링크 확인
 - [ ] 모바일/데스크톱 실기기 또는 브라우저에서 최종 smoke test
-- [ ] GitHub `main`에 작은 문서 변경을 push하여 Cloudflare 자동 재배포 확인
-- [ ] Cloudflare 배포 상태와 실제 serving commit이 최신 GitHub 커밋과 일치하는지 확인
+- [x] GitHub `main`에 커밋 `1b8623f`를 push하여 Cloudflare 자동 재배포 확인
+- [x] 공개 HTML에서 커밋 `1b8623f`에 추가된 콘솔 배너가 제공되는지 확인
 - [ ] 배포 실패 시 Cloudflare 로그를 기준으로 수정하고 재검증
+
+### 11-1. 보안 점검 및 강화
+
+- [x] 문의 폼과 `/api/contact` 서버 함수 제거
+- [x] Astro 7 보안 패치 버전으로 업그레이드
+- [x] Astro CSP 해시 및 외부 폰트 출처 제한 적용
+- [x] Cloudflare `_headers`에 HSTS, 클릭재킹 방지, MIME 스니핑 방지, Referrer 및 Permissions Policy 적용
+- [x] 저장소와 빌드 산출물에 비밀키가 포함되지 않았는지 점검
+
+### 11-2. Google Search Console 등록 및 검색 노출 요청
+
+- [ ] Google Search Console에서 URL 접두어 속성 `https://sondanha.pages.dev/` 추가
+- [ ] HTML 태그 인증 방식을 선택하고 발급된 `google-site-verification` 메타태그를 `BaseLayout.astro`의 `<head>`에 추가
+- [ ] 인증 태그 배포 후 Search Console에서 사이트 소유권 확인
+- [ ] Search Console의 Sitemaps에 `https://sondanha.pages.dev/sitemap-index.xml` 제출
+- [ ] URL 검사에서 아래 페이지의 라이브 URL을 확인하고 색인 생성 요청
+  - `https://sondanha.pages.dev/`
+  - `https://sondanha.pages.dev/product`
+  - `https://sondanha.pages.dev/study`
+  - `https://sondanha.pages.dev/contact`
+- [ ] 며칠 후 페이지 색인 상태와 검색 노출 여부 확인
+- [ ] 추후 커스텀 도메인을 연결하면 해당 도메인을 Search Console에 새 속성으로 등록
+
+> Google 검색 등록은 Google Cloud Console이 아니라 Google Search Console에서 진행한다. `pages.dev` 공용 도메인의 DNS를 소유하지 않으므로 현재는 도메인 속성이 아닌 URL 접두어 속성과 HTML 메타태그 인증을 사용한다.
 
 ---
 

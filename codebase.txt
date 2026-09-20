@@ -5,13 +5,13 @@
 DH 모노그램의 네이비·코럴·골드 팔레트를 확장한 라이트 모드 정적 사이트.
 
 ## Tech Stack
-- **Framework**: Astro 5.x (Static SSG)
+- **Framework**: Astro 7.x (Static SSG)
 - **Styling**: Tailwind CSS v4 (@tailwindcss/vite plugin)
 - **Animation**: Framer Motion (React Islands, LazyMotion)
 - **Interactive UI**: React 19 (@astrojs/react, Astro Islands)
 - **SEO**: @astrojs/sitemap, Schema.org JSON-LD
 - **Deploy**: Cloudflare Pages (Static, no adapter needed)
-- **Contact API**: Cloudflare Pages Functions + Resend (`/api/contact`)
+- **Contact**: Static email copy and `mailto:` link (no server function)
 - **Fonts**: Inter (EN) + Pretendard Variable (KR)
 
 ## Architecture Decisions
@@ -20,7 +20,8 @@ DH 모노그램의 네이비·코럴·골드 팔레트를 확장한 라이트 �
 3. **Single Data Source**: All content lives in `src/data/portfolio.json`. Sections read from this file at build time.
 4. **Modular Sections**: Each section is an independent component. Reorder by changing import order in `src/pages/index.astro`.
 5. **CSS Variables for Design Tokens**: All colors, fonts, spacing defined as CSS custom properties in `src/styles/global.css` via Tailwind v4 `@theme`.
-6. **Contact Delivery**: The browser posts to same-origin `/api/contact`; the Pages Function validates input and calls Resend so API keys never ship to the client.
+6. **Static Contact Surface**: The contact page exposes only an email copy action and `mailto:` link. No form endpoint, mail API key, or server function is deployed.
+7. **Browser Security**: Astro-generated CSP hashes protect inline assets, while Cloudflare `_headers` adds frame, transport, referrer, and browser-permission restrictions.
 
 ## Folder Structure
 ```
@@ -35,7 +36,7 @@ src/
 │   └── BaseLayout.astro # HTML shell, SEO meta, fonts, global styles
 ├── pages/
 │   ├── index.astro      # Portfolio page assembly
-│   └── contact.astro    # Full-page contact form and direct email tabs
+│   └── contact.astro    # Email address, copy action, and mailto link
 └── styles/
     └── global.css       # Tailwind v4 @import + @theme design tokens
 ```

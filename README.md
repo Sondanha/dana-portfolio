@@ -4,7 +4,7 @@ Son Danha의 제품 기획, AI·데이터 프로젝트, 백엔드 개발 경험�
 
 ## Tech stack
 
-- Astro 5 (static site generation)
+- Astro 7 (static site generation)
 - React 19 islands
 - Tailwind CSS 4
 - Framer Motion
@@ -31,8 +31,8 @@ npm run preview
 - `src/components/ui/`: React 기반 애니메이션 UI
 - `src/styles/global.css`: DH 브랜드 팔레트와 전역 디자인 토큰
 - `public/images/projects/`: 프로젝트 이미지
-- `functions/api/contact.ts`: 문의 폼 메일 발송용 Cloudflare Pages Function
-- `public/_routes.json`: `/api/*`만 Pages Function으로 전달하고 정적 자산 요청은 제외
+- `src/pages/contact.astro`: 이메일 주소 복사와 메일 앱 연결만 제공하는 정적 연락처 페이지
+- `public/_headers`: Cloudflare Pages 보안 응답 헤더
 
 ## Deployment
 
@@ -40,12 +40,7 @@ npm run preview
 
 - Build command: `npm run build`
 - Output directory: `dist`
-- Planned production URL: `https://sondanha.pages.dev`
+- Node.js: `.node-version`의 버전 사용
+- Production URL: `https://sondanha.pages.dev`
 
-### Contact form environment variables
-
-문의 폼은 Pages Function에서 Resend API를 호출합니다. Cloudflare Pages의 Production 환경변수에 다음 값을 설정해야 실제 메일이 발송됩니다.
-
-- `RESEND_API_KEY`: Resend API key (Secret)
-- `CONTACT_TO_EMAIL`: 문의를 받을 이메일 주소
-- `CONTACT_FROM_EMAIL`: Resend에서 인증된 발신 주소. 생략하면 테스트 발신 주소 사용
+문의 페이지는 별도 서버 함수나 외부 메일 API를 사용하지 않습니다. 방문자는 공개된 이메일 주소를 복사하거나 기본 메일 앱을 열어 직접 연락합니다.
