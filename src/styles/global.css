@@ -2,13 +2,13 @@
 
 /* ===== Design Tokens (DH monogram palette) ===== */
 @theme {
-  /* Warm neutral palette */
-  --color-bg-primary: #fffdf9;
-  --color-bg-secondary: #f7f4ed;
+  /* Crisp neutral palette */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f6f7f9;
   --color-bg-card: #ffffff;
-  --color-bg-card-hover: #fffaf3;
-  --color-border: #e8e1d6;
-  --color-border-hover: #d8cbbb;
+  --color-bg-card-hover: #fff8f5;
+  --color-border: #e4e7ec;
+  --color-border-hover: #cfd5de;
 
   /* Text */
   --color-text-primary: #17243e;
@@ -46,8 +46,117 @@
 /* ===== Base Styles ===== */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+main > section {
+  isolation: isolate;
+  overflow: clip;
+  position: relative;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+main > section:not(#hero):not(#contact)::before {
+  background-image: url('/favicon.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: '';
+  height: min(42vw, 34rem);
+  opacity: 0.065;
+  pointer-events: none;
+  position: absolute;
+  right: -7rem;
+  top: 8%;
+  width: min(42vw, 34rem);
+  z-index: -1;
+}
+
+main > section:nth-of-type(odd):not(#hero):not(#contact)::before {
+  left: -8rem;
+  right: auto;
+}
+
+main > section:not(#hero):not(#contact)::after {
+  border: 2px solid rgba(232, 93, 63, 0.2);
+  border-radius: 42% 58% 58% 42%;
+  content: '';
+  height: 24rem;
+  pointer-events: none;
+  position: absolute;
+  right: 7%;
+  top: 22%;
+  transform: rotate(18deg);
+  width: 24rem;
+  z-index: -1;
+}
+
+#about::before {
+  display: none;
+}
+
+#about::after {
+  left: 2% !important;
+  right: auto !important;
+  top: 8%;
+}
+
+#projects::before {
+  display: block;
+  background-image:
+    linear-gradient(138deg, transparent 0 47%, rgba(23, 36, 62, 0.13) 47.2% 48%, transparent 48.2%),
+    linear-gradient(160deg, rgba(232, 93, 63, 0.075), rgba(242, 184, 75, 0.025));
+  border: 1px solid rgba(232, 93, 63, 0.12);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  height: min(38vw, 29rem);
+  left: -7rem !important;
+  opacity: 1;
+  right: auto !important;
+  top: 28%;
+  transform: rotate(-11deg);
+  width: min(38vw, 29rem);
+}
+
+#projects {
+  background-color: #f7f4ef;
+  background-image:
+    radial-gradient(circle at 88% 18%, rgba(242, 184, 75, 0.1) 0 0.5rem, transparent 0.6rem),
+    linear-gradient(132deg, transparent 0 83%, rgba(232, 93, 63, 0.055) 83% 84%, transparent 84%);
+}
+
+#projects::after {
+  border-color: rgba(242, 184, 75, 0.3);
+  border-radius: 18%;
+  height: 18rem;
+  left: auto !important;
+  right: 5% !important;
+  top: 12%;
+  transform: rotate(24deg);
+  width: 18rem;
+}
+
+#skills::before {
+  display: none;
+}
+
+#timeline::before {
+  bottom: -7rem !important;
+  height: min(52vw, 42rem) !important;
+  left: auto !important;
+  right: 0 !important;
+  top: auto !important;
+  width: min(52vw, 42rem) !important;
+}
+
+main > section:nth-of-type(odd):not(#hero):not(#contact)::after {
+  left: 4%;
+  right: auto;
 }
 
 body {
@@ -56,6 +165,76 @@ body {
   font-family: var(--font-sans);
   line-height: 1.6;
   margin: 0;
+}
+
+.header-nav-shell {
+  border-radius: 0;
+}
+
+#site-header:hover .header-nav-shell,
+#site-header.is-scrolled .header-nav-shell {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: var(--color-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 36px rgba(23, 36, 62, 0.1);
+  margin-top: 0.5rem;
+  backdrop-filter: blur(18px);
+}
+
+#site-header:hover .header-contact-button,
+#site-header.is-scrolled .header-contact-button {
+  background: transparent;
+  border-color: rgba(197, 75, 50, 0.42);
+  color: var(--color-accent);
+}
+
+#site-header:hover .header-contact-button:hover,
+#site-header.is-scrolled .header-contact-button:hover {
+  background: transparent;
+  border-color: var(--color-accent);
+}
+
+#contact::before {
+  border: 2px solid rgba(232, 93, 63, 0.11);
+  border-radius: 999px;
+  content: '';
+  height: 24rem;
+  left: -15rem;
+  pointer-events: none;
+  position: absolute;
+  top: 3rem;
+  width: 24rem;
+  z-index: 0;
+}
+
+#contact::after {
+  border: 2px solid rgba(242, 184, 75, 0.2);
+  content: '';
+  height: 9rem;
+  pointer-events: none;
+  position: absolute;
+  right: 5%;
+  top: 16%;
+  transform: rotate(18deg);
+  width: 9rem;
+  z-index: 0;
+}
+
+.contact-tab-line {
+  background: var(--color-accent);
+  bottom: -1px;
+  height: 2px;
+  left: 10%;
+  opacity: 0;
+  position: absolute;
+  transform: scaleX(0.72);
+  transition: opacity 180ms ease, transform 300ms var(--ease-out-expo);
+  width: 80%;
+}
+
+.contact-tab-line.is-active {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 a:focus-visible,
@@ -72,18 +251,64 @@ button:focus-visible {
 
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar {
-  width: 6px;
+  display: none;
+  width: 0;
+  height: 0;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-bg-primary);
+@keyframes dh-float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(-2deg);
+  }
+  50% {
+    transform: translate3d(-12px, -18px, 0) rotate(2deg);
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 3px;
+@keyframes grid-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 44px 44px;
+  }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border-hover);
+@keyframes hero-orbit {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(18px, 12px, 0) scale(1.025);
+  }
+}
+
+.dh-float {
+  animation: dh-float 8s ease-in-out infinite;
+}
+
+.hero-grid {
+  animation: grid-drift 18s linear infinite;
+}
+
+.hero-orbit {
+  animation: hero-orbit 11s ease-in-out infinite;
+}
+
+.hero-orbit-delayed {
+  animation: hero-orbit 14s ease-in-out -4s infinite reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .dh-float,
+  .hero-grid,
+  .hero-orbit,
+  .hero-orbit-delayed {
+    animation: none;
+  }
+
 }

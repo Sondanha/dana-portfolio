@@ -13,13 +13,17 @@
 
 ### 7-1. 라이트 모드로 전환 (다크 → 라이트 기본)
 - [x] `global.css`의 `@theme` 색상 토큰 전체를 라이트 팔레트로 교체
-  - Background: `#fffdf9` / `#f7f4ed` / `#ffffff` (웜 아이보리 라이트 팔레트)
+  - Background: `#ffffff` / `#f6f7f9` (순백색 중심의 선명한 라이트 팔레트)
   - Text/Navy: `#17243e` (primary) / `#4c5870` (secondary) / `#7d8799` (tertiary)
-  - Border: `#e8e1d6` / `#d8cbbb`
+  - Border: `#e4e7ec` / `#cfd5de`
   - Brand accents: Coral `#e85d3f` (decorative) / `#c54b32` (accessible text), Gold `#f2b84b`, Navy `#17243e`
 - [x] Stripe 보라색 중심 팔레트를 투명 DH 파비콘의 네이비·코럴·골드 조합으로 교체
 - [x] 다크모드 전용 Tailwind 클래스 (`bg-[#0a0a0a]` 등) 모두 라이트 대응값으로 교체
 - [x] Hero gradient, card 배경색 라이트 모드 재정의
+- [x] 미색 배경을 제거하고 네이비 그리드·코럴 기하 도형 Hero 패턴 적용
+- [x] Hero에 한글 이름과 경영학·개발 정체성을 전면 배치하고 CTA 버튼 제거
+- [x] Hero에 반투명 DH 로고와 저속 부유·그리드 이동 애니메이션 적용
+- [x] 섹션 이동은 긴 콘텐츠를 방해하지 않는 `scroll-snap-type: y proximity`로 적용
 
 ### 7-2. Hero 섹션 — 태그 버튼 제거/교체
 - [x] "Product Owner & IT Leader" pill 버튼(초록 점 + 어두운 배경 캡슐형) **삭제**
@@ -47,16 +51,17 @@
 - [x] 카드 내부: 생성 이미지를 사용하는 컬러 비주얼 영역 + 그라디언트 fallback
 - [x] 애니메이션: 호버 시 subtle shadow 상승, 과한 glow 제거
 
-### 7-5. Contact Me 섹션 신규 추가
-- [x] 별도 섹션으로 독립 강조 (`id="contact"`)
-- [x] 브랜드 CTA 배너 형식:
-  - 전체 너비 배너, 네이비 배경 + 코럴·골드 글로우
-  - 대형 헤딩: "함께 만들어갈 프로덕트가 있다면"
-  - 서브: "커피 한 잔 사주세요. 비즈니스 얘기 나눠봐요."
-  - [x] 이메일 primary CTA
-  - [x] LinkedIn 미사용 결정에 따라 이메일 CTA만 제공
+### 7-5. Contact Me 독립 페이지 추가
+- [x] 페이지 하단에는 2열 Contact CTA만 배치
+- [x] Header와 하단 CTA에서 `/contact` 페이지로 이동
+- [x] Contact 폼을 전체 화면 독립 페이지로 분리
+- [x] `문의 남기기` / `이메일 주소` 탭 전환 시 박스 높이 고정
+- [x] 클립보드 기반 이메일 주소 복사 CTA
 - [x] `portfolio.json` contact 필드 추가
-- [x] Header 네비게이션에 "Contact" 링크 추가
+- [x] Header를 대형 DH 로고 + 좌측 메뉴 + 우측 `Contact Me!` CTA 구조로 재설계
+- [x] Contact를 `문의 남기기` / `이메일 주소` 탭 UI로 재구성
+- [x] `/api/contact` Pages Function과 Resend 연동 코드 추가
+- [ ] Cloudflare Pages에 `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, 선택적 `CONTACT_FROM_EMAIL` 설정 후 실메일 검증
 
 ### 7-6. 썸네일 이미지 생성 (AI 생성 이미지)
 **스타일 가이드 (초기 생성 이미지):**
@@ -84,6 +89,9 @@
 - [x] CRATE 개발 기간(`2025.12–2026.01`)과 MVP 성격 반영; 배포 링크는 없으며 잠정 중단 상태
 - [x] `meta.github`와 `meta.velog` 값 및 Footer 링크 생성 방식 수정
 - [x] Contact 섹션은 이메일만 공개하고 LinkedIn은 사용하지 않음
+- [x] `Now` 섹션을 관점과 가치관을 설명하는 `About` 섹션으로 교체
+- [x] About 소개를 Business·Team·Build·Interest 네 개의 간결한 문장으로 압축
+- [x] 진행 중인 프로덕트와 스터디·팀 프로젝트를 별도 그룹으로 구분
 - [ ] 출시 예정일, 활동 기간 등 시점에 따라 달라지는 문구 최신화
 
 ### 8-2. 정적 자산·SEO 완성

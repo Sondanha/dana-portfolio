@@ -1,0 +1,352 @@
+---
+import portfolioData from '../../data/portfolio.json';
+
+const { about, meta } = portfolioData;
+---
+
+<section class="px-6 py-[var(--spacing-section)]" id="about">
+  <div class="mx-auto max-w-6xl">
+    <div class="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+      <div>
+        <p class="mb-4 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">{about.eyebrow}</p>
+        <h2 class="whitespace-pre-line text-3xl font-bold leading-tight tracking-tight text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
+          {about.headline.split(/(기획|개발)/).map((part) =>
+            part === '기획' || part === '개발'
+              ? <span class="text-[var(--color-accent)]">{part}</span>
+              : part
+          )}
+        </h2>
+        <p class="mt-7 max-w-md text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
+          {about.description}
+        </p>
+        <a
+          href={meta.velog}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]"
+        >
+          Velog에서 더 긴 생각 보기
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 17 17 7M8 7h9v9" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="about-values-wrap relative">
+        <div class="about-card-shapes" aria-hidden="true">
+          <span class="about-shape about-shape-square"></span>
+          <span class="about-shape about-shape-triangle"></span>
+          <span class="about-shape about-shape-diamond"></span>
+        </div>
+
+        <ol class="about-values-grid relative z-10 grid h-full overflow-hidden rounded-xl border border-[var(--color-border)] bg-transparent sm:grid-cols-2" data-about-grid>
+          {about.values.map((value, index) => (
+            <li class="about-value-slot relative min-h-48">
+              <article class="about-value-card" tabindex="0" data-about-card>
+                <span class="absolute right-6 top-5 font-mono text-xs font-bold text-[var(--color-border-hover)]">0{index + 1}</span>
+                <h3 class="text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">{value.title}</h3>
+                <p class="about-value-description mt-7 max-w-md text-base font-semibold leading-relaxed text-[var(--color-text-primary)]">{value.description}</p>
+              </article>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const aboutCards = document.querySelectorAll<HTMLElement>('[data-about-card]');
+  const aboutGrid = document.querySelector<HTMLElement>('[data-about-grid]');
+  const desktopGrid = window.matchMedia('(min-width: 640px)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const aboutSection = document.querySelector<HTMLElement>('#about');
+  let autoPlayTimer: number | undefined;
+  let autoPlayResumeTimer: number | undefined;
+  let autoPlayIndex = 0;
+  let isAboutVisible = false;
+
+  const showBaseGrid = (): void => {
+    aboutGrid?.classList.remove('has-expanded-card');
+    aboutCards.forEach((card) => {
+      card.classList.remove('is-auto-expanded', 'is-expanded');
+    });
+  };
+
+  const stopAutoPlay = (): void => {
+    if (autoPlayTimer) window.clearTimeout(autoPlayTimer);
+    if (autoPlayResumeTimer) window.clearTimeout(autoPlayResumeTimer);
+    autoPlayTimer = undefined;
+    autoPlayResumeTimer = undefined;
+    showBaseGrid();
+  };
+
+  const playNextAutomaticCard = (): void => {
+    if (!desktopGrid.matches || reducedMotion.matches || !isAboutVisible || aboutCards.length === 0) return;
+
+    showBaseGrid();
+    const card = aboutCards[autoPlayIndex % aboutCards.length];
+    card.classList.add('is-expanded', 'is-auto-expanded');
+    aboutGrid?.classList.add('has-expanded-card');
+    autoPlayIndex = (autoPlayIndex + 1) % aboutCards.length;
+
+    autoPlayTimer = window.setTimeout(() => {
+      showBaseGrid();
+      autoPlayTimer = window.setTimeout(playNextAutomaticCard, 3600);
+    }, 6400);
+  };
+
+  const startAutoPlay = (): void => {
+    stopAutoPlay();
+    if (!desktopGrid.matches || reducedMotion.matches || !isAboutVisible) return;
+
+    playNextAutomaticCard();
+  };
+
+  const resumeAutoPlay = (): void => {
+    if (autoPlayResumeTimer) window.clearTimeout(autoPlayResumeTimer);
+    autoPlayResumeTimer = window.setTimeout(startAutoPlay, 700);
+  };
+
+  aboutGrid?.addEventListener('pointerenter', stopAutoPlay);
+  aboutGrid?.addEventListener('pointerleave', resumeAutoPlay);
+  aboutGrid?.addEventListener('focusin', stopAutoPlay);
+  aboutGrid?.addEventListener('focusout', () => {
+    window.setTimeout(() => {
+      if (!aboutGrid.matches(':hover') && !aboutGrid.contains(document.activeElement)) resumeAutoPlay();
+    });
+  });
+
+  desktopGrid.addEventListener('change', startAutoPlay);
+  reducedMotion.addEventListener('change', startAutoPlay);
+
+  if (aboutSection && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(([entry]) => {
+      isAboutVisible = entry.isIntersecting;
+      if (isAboutVisible) startAutoPlay();
+      else stopAutoPlay();
+    }, { threshold: 0.2 });
+    observer.observe(aboutSection);
+  } else {
+    isAboutVisible = true;
+    startAutoPlay();
+  }
+</script>
+
+<style>
+  .about-values-grid {
+    grid-auto-rows: 1fr;
+  }
+
+  .about-values-wrap {
+    isolation: isolate;
+  }
+
+  .about-card-shapes {
+    position: absolute;
+    inset: -3rem;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .about-shape {
+    position: absolute;
+    display: block;
+  }
+
+  .about-shape-square {
+    top: 0.75rem;
+    right: -1rem;
+    width: 11rem;
+    height: 11rem;
+    border: 2px solid rgba(23, 36, 62, 0.08);
+    border-radius: 1.75rem;
+    transform: rotate(14deg);
+  }
+
+  .about-shape-triangle {
+    bottom: -1rem;
+    left: -0.5rem;
+    width: 12rem;
+    height: 11rem;
+    background: rgba(232, 93, 63, 0.055);
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    transform: rotate(-12deg);
+  }
+
+  .about-shape-diamond {
+    right: 35%;
+    bottom: -2.25rem;
+    width: 7rem;
+    height: 7rem;
+    border: 2px solid rgba(242, 184, 75, 0.13);
+    border-radius: 1rem;
+    transform: rotate(45deg);
+  }
+
+  .about-value-slot {
+    border-color: var(--color-border);
+    transition: border-color 650ms ease;
+  }
+
+  .about-values-grid.has-expanded-card .about-value-slot {
+    border-color: transparent;
+  }
+
+  .about-values-grid.has-expanded-card .about-value-card:not(.is-expanded) {
+    opacity: 0;
+  }
+
+  .about-value-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 1.75rem;
+    transition:
+      left 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      top 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      width 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      height 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 500ms ease,
+      box-shadow 650ms ease,
+      background 650ms ease,
+      opacity 650ms ease;
+  }
+
+  .about-value-slot:nth-child(1) .about-value-card {
+    border-top-left-radius: 0.7rem;
+  }
+
+  .about-value-slot:nth-child(2) .about-value-card {
+    border-top-right-radius: 0.7rem;
+  }
+
+  .about-value-slot:nth-child(3) .about-value-card {
+    border-bottom-left-radius: 0.7rem;
+  }
+
+  .about-value-slot:nth-child(4) .about-value-card {
+    border-bottom-right-radius: 0.7rem;
+  }
+
+  .about-value-card::after {
+    position: absolute;
+    right: 1.75rem;
+    bottom: 1.15rem;
+    left: 1.75rem;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-brand-coral), var(--color-brand-gold));
+    content: '';
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .about-value-card.is-hovered {
+    z-index: 5;
+    border-color: rgba(232, 93, 63, 0.92);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .about-value-card.is-hovered::after {
+    opacity: 1;
+    animation: about-hover-progress 500ms linear forwards;
+  }
+
+  .about-value-card.is-expanded {
+    z-index: 20;
+    border-color: rgba(232, 93, 63, 0.95);
+    border-radius: 0.7rem;
+    background: transparent;
+    box-shadow: 0 22px 60px rgba(23, 36, 62, 0.14);
+  }
+
+  .about-value-card.is-expanded::after {
+    opacity: 0;
+    transition: opacity 160ms ease;
+  }
+
+  .about-value-description {
+    transition: font-size 700ms ease, line-height 700ms ease;
+  }
+
+  @keyframes about-hover-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  @media (min-width: 640px) {
+    .about-value-slot:nth-child(1),
+    .about-value-slot:nth-child(2) {
+      border-bottom-width: 1px;
+    }
+
+    .about-value-slot:nth-child(1),
+    .about-value-slot:nth-child(3) {
+      border-right-width: 1px;
+    }
+
+    .about-value-slot:nth-child(1) .about-value-card.is-hovered:not(.is-expanded),
+    .about-value-slot:nth-child(3) .about-value-card.is-hovered:not(.is-expanded) {
+      width: calc(100% + 1px);
+    }
+
+    .about-value-slot:nth-child(2) .about-value-card.is-hovered:not(.is-expanded),
+    .about-value-slot:nth-child(4) .about-value-card.is-hovered:not(.is-expanded) {
+      left: -1px;
+      width: calc(100% + 1px);
+    }
+
+    .about-value-slot:nth-child(1) .about-value-card.is-hovered:not(.is-expanded),
+    .about-value-slot:nth-child(2) .about-value-card.is-hovered:not(.is-expanded) {
+      height: calc(100% + 1px);
+    }
+
+    .about-value-slot:nth-child(3) .about-value-card.is-hovered:not(.is-expanded),
+    .about-value-slot:nth-child(4) .about-value-card.is-hovered:not(.is-expanded) {
+      top: -1px;
+      height: calc(100% + 1px);
+    }
+
+    .about-value-card.is-expanded {
+      width: 200%;
+      height: 200%;
+    }
+
+    .about-value-slot:nth-child(2) .about-value-card.is-expanded,
+    .about-value-slot:nth-child(4) .about-value-card.is-expanded {
+      left: -100%;
+    }
+
+    .about-value-slot:nth-child(3) .about-value-card.is-expanded,
+    .about-value-slot:nth-child(4) .about-value-card.is-expanded {
+      top: -100%;
+    }
+
+    .about-value-card.is-expanded .about-value-description {
+      font-size: 1.125rem;
+      line-height: 1.8;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .about-value-slot:not(:last-child) {
+      border-bottom-width: 1px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-value-card,
+    .about-value-description {
+      transition: none;
+    }
+  }
+</style>

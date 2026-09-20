@@ -5,15 +5,28 @@ import ProjectCard from '../ui/ProjectCard';
 const { projects } = portfolioData;
 const featuredProjects = projects.filter((project) => project.featured);
 const studyProjects = projects.filter((project) => !project.featured);
+const studyProjectSummaries: Record<string, string> = {
+  'heogayo-legal-rag': '법률·조례 정보를 쉽게 찾고 이해할 수 있도록, 사용자의 질문에 관련 근거와 함께 답변하는 법률 RAG 챗봇 웹서비스입니다.',
+  'polo-paper-ai': '복잡한 학술 논문을 쉬운 설명과 시각 자료로 재구성해, 연구 내용을 더 빠르고 직관적으로 이해하도록 돕는 AI 논문 학습 플랫폼입니다.',
+  'patent-llama-finetuning': '범용 LLM을 특허·법률 분야에 특화해, 전문 질문에 더 적합한 답변을 제공하도록 학습한 도메인 특화 모델 프로젝트입니다.',
+  'crate-selection-platform': '지원서 생성·수집부터 평가와 선발까지 하나의 흐름으로 관리해, 반복적인 운영 업무를 줄이고 효율적인 선발을 돕는 플랫폼입니다.',
+};
 ---
 
 <section class="px-6 py-[var(--spacing-section)]" id="projects">
   <div class="mx-auto max-w-6xl">
-    <!-- Section label -->
-    <p class="mb-4 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">Projects</p>
-    <h2 class="mb-12 text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-      만들고 있는 것들
-    </h2>
+    <div class="flex items-center justify-center gap-5" aria-label="Projects">
+      <span class="h-px w-12 bg-[rgba(197,75,50,0.35)]" aria-hidden="true"></span>
+      <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">PROJECTS</h2>
+      <span class="h-px w-12 bg-[rgba(197,75,50,0.35)]" aria-hidden="true"></span>
+    </div>
+
+    <div class="mb-10 mt-20">
+      <div>
+        <p class="mb-4 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">Product</p>
+        <h3 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">진행 중인 프로덕트</h3>
+      </div>
+    </div>
 
     <div class="space-y-5">
       {featuredProjects.map((project) => (
@@ -25,7 +38,9 @@ const studyProjects = projects.filter((project) => !project.featured);
             category={project.category}
             thumbnail={project.thumbnail}
             thumbnailPosition={project.thumbnailPosition as 'center' | 'top'}
+            thumbnailFit={project.id === 'mobile-ai-product' ? 'contain' : 'cover'}
             tags={project.tags}
+            detailUrl={`/product#${project.id}`}
             liveUrl={project.links.live || undefined}
             githubUrl={project.links.github || undefined}
             secondaryUrl={project.links.secondary || undefined}
@@ -37,23 +52,152 @@ const studyProjects = projects.filter((project) => !project.featured);
     </div>
 
     {studyProjects.length > 0 && (
-      <div class="mt-5 grid grid-cols-1 gap-[var(--spacing-bento-gap)] md:grid-cols-2">
-        {studyProjects.map((project) => (
-          <ProjectCard
-            client:visible={{ rootMargin: '200px' }}
-            title={project.title}
-            description={project.description}
-            category={project.category}
-            thumbnail={project.thumbnail}
-            thumbnailPosition={project.thumbnailPosition as 'center' | 'top'}
-            tags={project.tags}
-            liveUrl={project.links.live || undefined}
-            githubUrl={project.links.github || undefined}
-            secondaryUrl={project.links.secondary || undefined}
-            secondaryLabel={project.links.secondaryLabel || undefined}
-          />
-        ))}
+      <div class="mt-28 border-t border-[var(--color-border)] pt-16 sm:mt-32">
+        <div class="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="mb-4 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">Study Project</p>
+            <h3 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">배우고 협업하며 만든 프로젝트</h3>
+          </div>
+          <div class="flex items-end">
+            <div class="flex shrink-0 gap-2">
+              <button id="study-project-prev" type="button" class="study-project-control flex h-12 w-12 items-center justify-center rounded-md" aria-label="이전 프로젝트">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m15 18-6-6 6-6" />
+                </svg>
+              </button>
+              <button id="study-project-next" type="button" class="study-project-control flex h-12 w-12 items-center justify-center rounded-md" aria-label="다음 프로젝트">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m9 18 6-6-6-6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="study-project-track" class="study-project-track -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-5 sm:mx-0 sm:px-0">
+          {studyProjects.map((project) => {
+            const serviceName = project.title.split(' — ')[0];
+            const linkLabel = project.title.replace(' — ', ' - ');
+            const studyUrl = `/study#${project.id}`;
+
+            return (
+              <article class="group w-[82vw] max-w-[22rem] shrink-0 snap-start sm:w-[22rem]">
+                <a href={studyUrl} class="block rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]" aria-label={`${serviceName} 프로젝트 자세히 보기`}>
+                  <div class="relative aspect-[4/5] overflow-hidden rounded-lg bg-[var(--color-bg-secondary)]">
+                    <img
+                      src={project.thumbnail}
+                      alt={`${serviceName} 프로젝트 미리보기`}
+                      class:list={[
+                        'h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]',
+                        project.thumbnailPosition === 'top' ? 'object-top' : 'object-center',
+                      ]}
+                      loading="lazy"
+                    />
+                    <div class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[rgba(14,23,43,0.82)] via-[rgba(14,23,43,0.28)] to-transparent"></div>
+                    <p class="absolute bottom-6 left-6 text-2xl font-extrabold tracking-tight text-white drop-shadow-sm">{serviceName}</p>
+                  </div>
+                </a>
+
+                <p class="mt-5 min-h-[6.5rem] text-base leading-relaxed text-[var(--color-text-secondary)]">
+                  {studyProjectSummaries[project.id] ?? project.description}
+                </p>
+
+                <a href={studyUrl} class="study-project-link mt-3 inline-flex items-center gap-1.5 text-base font-semibold text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]">
+                  {linkLabel}
+                  <span class="study-project-arrow" aria-hidden="true">
+                    <span class="study-project-arrow-short">›</span>
+                    <span class="study-project-arrow-long">→</span>
+                  </span>
+                </a>
+              </article>
+            );
+          })}
+        </div>
       </div>
     )}
   </div>
 </section>
+
+<script>
+  const studyTrack = document.querySelector<HTMLElement>('#study-project-track');
+  const previousButton = document.querySelector<HTMLButtonElement>('#study-project-prev');
+  const nextButton = document.querySelector<HTMLButtonElement>('#study-project-next');
+
+  const updateStudyControls = (): void => {
+    if (!studyTrack || !previousButton || !nextButton) return;
+    const maxScroll = studyTrack.scrollWidth - studyTrack.clientWidth;
+    previousButton.disabled = studyTrack.scrollLeft <= 4;
+    nextButton.disabled = studyTrack.scrollLeft >= maxScroll - 4;
+  };
+
+  const moveStudyTrack = (direction: -1 | 1): void => {
+    if (!studyTrack) return;
+    const firstCard = studyTrack.querySelector<HTMLElement>('article');
+    const distance = firstCard ? firstCard.offsetWidth + 20 : studyTrack.clientWidth * 0.8;
+    studyTrack.scrollBy({ left: distance * direction, behavior: 'smooth' });
+  };
+
+  previousButton?.addEventListener('click', () => moveStudyTrack(-1));
+  nextButton?.addEventListener('click', () => moveStudyTrack(1));
+  studyTrack?.addEventListener('scroll', updateStudyControls, { passive: true });
+  window.addEventListener('resize', updateStudyControls, { passive: true });
+  updateStudyControls();
+</script>
+
+<style>
+  .study-project-track {
+    scrollbar-width: none;
+  }
+
+  .study-project-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .study-project-control {
+    cursor: pointer;
+    border: 1px solid var(--color-accent);
+    background: var(--color-accent);
+    color: white;
+    transition: background-color 180ms ease, border-color 180ms ease;
+  }
+
+  .study-project-control:hover:not(:disabled) {
+    border-color: var(--color-accent-hover);
+    background: var(--color-accent-hover);
+  }
+
+  .study-project-control:disabled {
+    cursor: default;
+    border-color: var(--color-accent);
+    background: transparent;
+    color: var(--color-accent);
+    opacity: 1;
+  }
+
+  .study-project-arrow {
+    display: inline-grid;
+    place-items: center;
+    width: 1.25rem;
+  }
+
+  .study-project-arrow-short,
+  .study-project-arrow-long {
+    grid-area: 1 / 1;
+    transition: opacity 180ms ease, transform 220ms var(--ease-out-expo);
+  }
+
+  .study-project-arrow-long {
+    opacity: 0;
+    transform: translateX(-0.3rem);
+  }
+
+  .study-project-link:hover .study-project-arrow-short {
+    opacity: 0;
+    transform: translateX(0.25rem);
+  }
+
+  .study-project-link:hover .study-project-arrow-long {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>

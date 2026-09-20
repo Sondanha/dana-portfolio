@@ -1,49 +1,269 @@
 ---
-import portfolioData from '../../data/portfolio.json';
 import AnimatedBentoCard from '../ui/AnimatedBentoCard';
 
-const { skills } = portfolioData;
+const capabilities = [
+  {
+    id: 'ai-model',
+    title: 'AI & Model Engineering',
+    description: 'RAG와 에이전트 구현을 넘어 오픈소스 모델 학습과 추론으로 확장하고 있습니다.',
+    span: 'lg:col-span-7',
+    tools: [
+      { name: 'Hugging Face', icon: '/images/skills/huggingface.svg' },
+      { name: 'PyTorch', icon: '/images/skills/pytorch.svg' },
+      { name: 'TensorFlow', icon: '/images/skills/tensorflow.svg' },
+      { name: 'Runpod', icon: '/images/skills/runpod.webp' },
+    ],
+  },
+  {
+    id: 'full-stack',
+    title: 'Full-stack Product',
+    description: '사용자 화면부터 API와 데이터 구조까지 하나의 제품으로 연결합니다.',
+    span: 'lg:col-span-5',
+    tools: [
+      { name: 'FastAPI', icon: '/images/skills/fastapi.svg' },
+      { name: 'Flutter', icon: '/images/skills/flutter.svg' },
+    ],
+  },
+  {
+    id: 'team',
+    title: 'Team Execution',
+    description: '기획부터 구현까지 역할을 연결하며 팀의 결과를 함께 만듭니다.',
+    span: 'lg:col-span-5',
+    tools: [
+      { name: 'GitHub', icon: '/images/skills/github.svg' },
+      { name: 'Notion', icon: '/images/skills/notion.svg' },
+      { name: 'Slack', icon: '/images/skills/slack.svg' },
+      { name: 'Jira', icon: '/images/skills/jira.svg' },
+    ],
+  },
+  {
+    id: 'data-cloud',
+    title: 'Data & Cloud',
+    description: '데이터를 설계하고 클라우드 환경에 서비스를 배포합니다.',
+    span: 'lg:col-span-7',
+    tools: [
+      { name: 'AWS', icon: '/images/skills/amazonwebservices.svg' },
+      { name: 'Cloudflare', icon: '/images/skills/cloudflare.svg' },
+      { name: 'Docker', icon: '/images/skills/docker.svg' },
+      { name: 'Supabase', icon: '/images/skills/supabase.svg' },
+      { name: 'Qdrant', icon: '/images/skills/qdrant.svg' },
+      { name: 'PostgreSQL', icon: '/images/skills/postgresql.svg' },
+    ],
+  },
+] as const;
 
-const iconMap: Record<string, string> = {
-  brain: '🧠',
-  database: '🗄️',
-  cloud: '☁️',
-  users: '👥',
-};
+const marqueeTools = capabilities.flatMap((capability) => capability.tools);
 ---
 
 <section class="px-6 py-[var(--spacing-section)]" id="skills">
   <div class="mx-auto max-w-6xl">
-    <!-- Section label -->
     <p class="mb-4 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">Skills</p>
-    <h2 class="mb-12 text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-      목적 중심의 기술 스택
+    <h2 class="max-w-2xl text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+      아이디어를 서비스로 완성하는 역량
     </h2>
 
-    <!-- Bento Grid -->
-    <div class="grid grid-cols-1 gap-[var(--spacing-bento-gap)] sm:grid-cols-2 lg:grid-cols-4">
-      {skills.map((skill, index) => (
-        <AnimatedBentoCard client:visible delay={index * 0.1}>
-          <div class="group h-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-6 shadow-[0_8px_28px_rgba(42,39,94,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-border-hover)] hover:bg-[var(--color-bg-card-hover)] hover:shadow-[0_16px_36px_rgba(42,39,94,0.09)]">
-            <!-- Icon -->
-            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--color-accent-subtle)] text-2xl transition-transform duration-300 group-hover:scale-105">
-              {iconMap[skill.icon] || '⚡'}
-            </div>
-            <!-- Category -->
-            <h3 class="mb-2 text-base font-bold text-[var(--color-text-primary)]">{skill.category}</h3>
-            <!-- Description -->
-            <p class="mb-4 text-sm leading-relaxed text-[var(--color-text-tertiary)]">{skill.description}</p>
-            <!-- Items -->
-            <div class="flex flex-wrap gap-1.5">
-              {skill.items.map((item) => (
-                <span class="rounded-md bg-[var(--color-bg-secondary)] px-2.5 py-1 text-xs font-medium text-[var(--color-text-secondary)]">
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-        </AnimatedBentoCard>
+    <div class="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-12">
+      {capabilities.map((capability, index) => (
+        <div class={capability.span} id={`skill-${capability.id}`}>
+          <AnimatedBentoCard client:visible delay={index * 0.08}>
+            <article class="skill-capability-card group flex h-full min-h-[19rem] flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-transparent p-6 shadow-[0_12px_38px_rgba(23,36,62,0.055)] transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(197,75,50,0.42)] hover:shadow-[0_20px_48px_rgba(23,36,62,0.1)] sm:p-8">
+              <h3 class="text-2xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-3xl">
+                {capability.title}
+              </h3>
+              <p class="mt-4 max-w-xl text-sm leading-7 text-[var(--color-text-secondary)] sm:text-base">
+                {capability.description}
+              </p>
+
+              <ul class="mt-auto flex flex-wrap gap-3 pt-8" aria-label={`${capability.title} 기술`}>
+                {capability.tools.map((tool) => (
+                  <li class="skill-logo-item is-logo-only" title={tool.name}>
+                    <img src={tool.icon} alt="" aria-hidden="true" width="26" height="26" loading="lazy" />
+                    <span class="sr-only">{tool.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </AnimatedBentoCard>
+        </div>
       ))}
+    </div>
+
+    <div class="skills-logo-marquee mt-16" role="region" aria-label="사용 기술 로고">
+      <div class="skills-logo-track">
+        <ul class="skills-logo-group">
+          {marqueeTools.map((tool) => (
+            <li title={tool.name}>
+              <img src={tool.icon} alt={tool.name} loading="lazy" />
+            </li>
+          ))}
+        </ul>
+        <ul class="skills-logo-group" aria-hidden="true">
+          {marqueeTools.map((tool) => (
+            <li title={tool.name}>
+              <img src={tool.icon} alt="" loading="lazy" />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  .skill-capability-card {
+    position: relative;
+  }
+
+  .skill-capability-card::after {
+    position: absolute;
+    right: -4.5rem;
+    bottom: -5rem;
+    width: 13rem;
+    height: 13rem;
+    border: 1px solid rgba(197, 75, 50, 0.09);
+    border-radius: 50%;
+    content: '';
+    pointer-events: none;
+    transition: transform 500ms var(--ease-out-expo), border-color 300ms ease;
+  }
+
+  .skill-capability-card:hover::after {
+    border-color: rgba(197, 75, 50, 0.18);
+    transform: translate(-0.75rem, -0.5rem) scale(1.05);
+  }
+
+  .skill-logo-item {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.65rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.7rem;
+    background: rgba(255, 255, 255, 0.88);
+    padding: 0.45rem 0.7rem;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
+  }
+
+  .skill-logo-item img {
+    width: 1.55rem;
+    height: 1.55rem;
+    object-fit: contain;
+  }
+
+  .skill-logo-item:hover {
+    border-color: rgba(197, 75, 50, 0.42);
+    color: var(--color-text-primary);
+    transform: translateY(-2px);
+  }
+
+  .skill-logo-item.is-logo-only {
+    justify-content: center;
+    width: 3.2rem;
+    padding: 0.45rem;
+  }
+
+  .skills-logo-marquee {
+    width: 100%;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+  }
+
+  .skills-logo-track {
+    display: flex;
+    width: max-content;
+    animation: skills-logo-scroll 34s linear infinite;
+    will-change: transform;
+  }
+
+  .skills-logo-marquee:hover .skills-logo-track {
+    animation-play-state: paused;
+  }
+
+  .skills-logo-group {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    margin: 0;
+    padding: 1.25rem clamp(2.5rem, 5vw, 5rem) 1.25rem 0;
+    list-style: none;
+  }
+
+  .skills-logo-group li {
+    display: grid;
+    width: 4.5rem;
+    height: 3rem;
+    flex: 0 0 auto;
+    place-items: center;
+  }
+
+  .skills-logo-group img {
+    width: auto;
+    max-width: 3.25rem;
+    height: auto;
+    max-height: 2.25rem;
+    object-fit: contain;
+    opacity: 0.68;
+    filter: grayscale(1);
+    transition: opacity 180ms ease, filter 180ms ease, transform 180ms ease;
+  }
+
+  .skills-logo-group li:hover img {
+    opacity: 1;
+    filter: grayscale(0);
+    transform: translateY(-2px);
+  }
+
+  @keyframes skills-logo-scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .skill-logo-item span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .skill-logo-item {
+      justify-content: center;
+      width: 2.8rem;
+      padding: 0.45rem;
+    }
+
+    .skills-logo-track {
+      animation-duration: 25s;
+    }
+
+    .skills-logo-group li {
+      width: 3.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skills-logo-marquee {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .skills-logo-track {
+      animation: none;
+    }
+
+    .skills-logo-group[aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

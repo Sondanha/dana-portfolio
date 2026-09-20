@@ -7,7 +7,9 @@ interface ProjectCardProps {
   readonly category: string;
   readonly thumbnail: string;
   readonly thumbnailPosition?: 'center' | 'top';
+  readonly thumbnailFit?: 'cover' | 'contain';
   readonly tags: readonly string[];
+  readonly detailUrl?: string;
   readonly liveUrl?: string;
   readonly githubUrl?: string;
   readonly secondaryUrl?: string;
@@ -22,13 +24,38 @@ export default function ProjectCard({
   category,
   thumbnail,
   thumbnailPosition = 'center',
+  thumbnailFit = 'cover',
   tags,
+  detailUrl,
   liveUrl,
   githubUrl,
   secondaryUrl,
   secondaryLabel = 'Repository',
   isFeatured = false,
 }: ProjectCardProps): ReactNode {
+  const visual = (
+    <div className={`relative w-full overflow-hidden ${thumbnailFit === 'contain' ? 'bg-black' : 'bg-gradient-to-br from-[#fff3e4] via-[#fffaf3] to-[#f7ddd4]'} ${isFeatured ? 'aspect-[16/10] lg:h-full lg:aspect-auto' : 'aspect-video'}`}>
+      {thumbnail ? (
+        <img
+          src={thumbnail}
+          alt={`${title} 프로젝트 미리보기`}
+          className={`absolute inset-0 h-full w-full transition-transform duration-700 ${
+            thumbnailFit === 'contain'
+              ? 'object-contain group-hover:scale-[1.02]'
+              : 'object-cover group-hover:scale-[1.025]'
+          } ${thumbnailPosition === 'top' ? 'object-top' : 'object-center'}`}
+          loading="lazy"
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center">
+          <span className="text-4xl text-[var(--color-text-tertiary)]">
+            {category === 'Product' ? '🚀' : '📚'}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <LazyMotion features={domAnimation}>
       <m.article
@@ -42,35 +69,26 @@ export default function ProjectCard({
         }`}
       >
         {/* Visual area */}
-        <div className={`relative w-full overflow-hidden bg-gradient-to-br from-[#fff3e4] via-[#fffaf3] to-[#f7ddd4] ${isFeatured ? 'aspect-[16/10] lg:order-2 lg:aspect-auto' : 'aspect-video'}`}>
-          {thumbnail ? (
-            <img
-              src={thumbnail}
-              alt={`${title} 프로젝트 미리보기`}
-              className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.025] ${thumbnailPosition === 'top' ? 'object-top' : 'object-center'}`}
-              loading="lazy"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              <span className="text-4xl text-[var(--color-text-tertiary)]">
-                {category === 'Product' ? '🚀' : '📚'}
-              </span>
-            </div>
-          )}
-        </div>
+        {detailUrl ? (
+          <a href={detailUrl} className={`${isFeatured ? 'lg:order-2 lg:h-full lg:min-h-0' : ''} block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)]`} aria-label={`${title} 자세히 보기`}>
+            {visual}
+          </a>
+        ) : visual}
 
         {/* Content */}
         <div className={`relative flex flex-1 flex-col ${isFeatured ? 'justify-center p-8 sm:p-10 lg:p-12' : 'p-6'}`}>
-          <span className={`mb-5 w-fit rounded-md px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] ${isFeatured ? 'bg-[var(--color-accent-subtle)] text-[var(--color-accent)]' : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]'}`}>
-            {category}
-          </span>
+          {!isFeatured && (
+            <span className="mb-5 w-fit rounded-md bg-[var(--color-bg-secondary)] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+              {category}
+            </span>
+          )}
           <h3 className={`${isFeatured ? 'text-2xl sm:text-3xl' : 'text-lg'} mb-3 font-bold tracking-tight text-[var(--color-text-primary)]`}>{title}</h3>
           {description && (
             <p className={`${isFeatured ? 'max-w-md text-base' : 'text-sm'} mb-5 leading-relaxed text-[var(--color-text-secondary)]`}>{description}</p>
           )}
 
           {/* Tags */}
-          {tags.length > 0 && (
+          {!isFeatured && tags.length > 0 && (
             <div className="mb-4 flex flex-wrap gap-1.5">
               {tags.map((tag) => (
                 <span
@@ -85,6 +103,15 @@ export default function ProjectCard({
 
           {/* Links */}
           <div className="mt-auto flex items-center gap-4 pt-1">
+            {detailUrl && (
+              <a
+                href={detailUrl}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]"
+              >
+                자세히 보기
+                <span aria-hidden="true">→</span>
+              </a>
+            )}
             {liveUrl && (
               <a
                 href={liveUrl}

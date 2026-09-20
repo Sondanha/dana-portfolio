@@ -11,6 +11,7 @@ DH 모노그램의 네이비·코럴·골드 팔레트를 확장한 라이트 �
 - **Interactive UI**: React 19 (@astrojs/react, Astro Islands)
 - **SEO**: @astrojs/sitemap, Schema.org JSON-LD
 - **Deploy**: Cloudflare Pages (Static, no adapter needed)
+- **Contact API**: Cloudflare Pages Functions + Resend (`/api/contact`)
 - **Fonts**: Inter (EN) + Pretendard Variable (KR)
 
 ## Architecture Decisions
@@ -19,20 +20,22 @@ DH 모노그램의 네이비·코럴·골드 팔레트를 확장한 라이트 �
 3. **Single Data Source**: All content lives in `src/data/portfolio.json`. Sections read from this file at build time.
 4. **Modular Sections**: Each section is an independent component. Reorder by changing import order in `src/pages/index.astro`.
 5. **CSS Variables for Design Tokens**: All colors, fonts, spacing defined as CSS custom properties in `src/styles/global.css` via Tailwind v4 `@theme`.
+6. **Contact Delivery**: The browser posts to same-origin `/api/contact`; the Pages Function validates input and calls Resend so API keys never ship to the client.
 
 ## Folder Structure
 ```
 src/
 ├── components/
 │   ├── layout/          # Header, Footer (Astro, static)
-│   ├── sections/        # Hero, Now, Projects, Skills, Timeline (Astro, static shell)
+│   ├── sections/        # Hero, About, Projects, Skills, Timeline, Contact CTA
 │   └── ui/              # AnimatedBentoCard, ProjectCard, AnimatedTimeline (React, interactive)
 ├── data/
 │   └── portfolio.json   # All content data
 ├── layouts/
 │   └── BaseLayout.astro # HTML shell, SEO meta, fonts, global styles
 ├── pages/
-│   └── index.astro      # Single-page assembly
+│   ├── index.astro      # Portfolio page assembly
+│   └── contact.astro    # Full-page contact form and direct email tabs
 └── styles/
     └── global.css       # Tailwind v4 @import + @theme design tokens
 ```
@@ -45,11 +48,12 @@ src/
 - **Data IDs**: kebab-case (e.g., "mobile-ai-product", "ai-data")
 
 ## Design System
-- **Palette**: Warm light mode. Midnight navy (#17243e), coral (#e85d3f; accessible text tone #c54b32), and gold (#f2b84b) brand accents with ivory surfaces.
+- **Palette**: Crisp white surfaces with midnight navy (#17243e), coral (#e85d3f; accessible text tone #c54b32), and gold (#f2b84b) accents.
 - **Typography**: Bold, large headings (text-5xl to text-8xl). Clean body text (text-sm to text-lg).
 - **Layout**: Max-width 6xl (1152px). Generous section padding (7rem). Bento Grid with 1rem gap.
 - **Cards**: Rounded-xl, subtle border/shadow, restrained hover elevation.
-- **Animations**: Viewport-triggered (once). Fade-in + slide-up for cards. Stagger for lists.
+- **Animations**: Viewport-triggered card motion plus a reduced-motion-safe floating DH mark and drifting hero grid.
+- **Scrolling**: Section-level `scroll-snap-type: y proximity`; avoids trapping users inside tall content.
 
 ## Client Directives (Astro Islands)
 - `client:visible`: Used for all animated components (loads JS only when scrolled into view).
@@ -58,8 +62,8 @@ src/
 
 ## Data Schema (portfolio.json)
 - `meta`: Site metadata (name, title, description, social links)
-- `hero`: Main headline, subheadline, CTA
-- `now`: Current role and status
+- `hero`: Main identity headline, subheadline, tagline
+- `about`: Personal perspective, introduction, and three working values
 - `projects[]`: id, title, category, description, tags, thumbnail, thumbnailPosition, links, featured, gridSpan
 - `skills[]`: id, category, icon, description, items
 - `timeline[]`: id, period, title, description, type (achievement|education|activity), link

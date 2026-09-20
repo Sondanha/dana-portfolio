@@ -1,44 +1,55 @@
 {
   "meta": {
     "name": "Son Danha",
-    "title": "비즈니스와 AI를 연결하는 Product Owner",
-    "description": "경영학을 기반으로 AI 에이전트와 BaaS를 활용해 프로덕트를 빠르게 런칭하는 IT 리더",
+    "nameKo": "손단하",
+    "title": "재미와 사업성을 함께 설계하고 구현하는 개발자",
+    "description": "경영학의 비즈니스·조직 이해를 바탕으로 기획과 제품 설계부터 구현까지 함께하는 개발자 손단하의 포트폴리오",
     "siteUrl": "https://sondanha.pages.dev",
     "email": "danhana531@gmail.com",
     "github": "https://github.com/Sondanha",
     "velog": "https://velog.io/@son-dan-ha"
   },
   "hero": {
-    "headline": "Business meets AI.",
-    "subheadline": "경영학을 기반으로 AI 에이전트와 BaaS를 활용해\n프로덕트를 설계하고 빠르게 런칭합니다.",
-    "tagline": "Product Owner & IT Leader",
-    "cta": {
-      "label": "프로젝트 보기",
-      "href": "#projects"
-    }
+    "headline": "Business meets AI\n개발자 손단하입니다",
+    "subheadline": "비즈니스와 소프트웨어 개발 경험을 바탕으로,\n기획과 제품 설계부터 실제 구현까지 함께합니다."
   },
-  "now": {
-    "role": "AI 프로덕트 PO & 개발 리드",
-    "status": "Building",
-    "highlights": [
-      "앱 프로덕트 10월 초 출시 예정",
-      "B2B 웹 프로덕트 기획 단계"
+  "about": {
+    "eyebrow": "About",
+    "headline": "기획과 개발 사이에\n경계를 두지 않습니다.",
+    "description": "시장을 이해하는 시선으로 제품의 방향을 함께 정하고, 엔터테인먼트와 AI가 만나는 경험을 직접 만듭니다.",
+    "values": [
+      {
+        "title": "Business",
+        "description": "사용자가 왜 선택하고, 제품이 어떻게 지속될지 생각합니다."
+      },
+      {
+        "title": "Team",
+        "description": "시장의 요구를 빠르게 파악하고, 팀에 필요한 방식으로 유연하게 협업합니다."
+      },
+      {
+        "title": "Build",
+        "description": "팀과 함께 기획·설계 방향을 정하고, AI 에이전트와 다양한 도구를 활용해 프론트엔드부터 백엔드·배포까지 제품을 완성합니다."
+      },
+      {
+        "title": "Interest",
+        "description": "새로운 기술을 탐구해 엔터테인먼트와 AI가 만드는 경험을 제품으로 구현·운영하고, 그 과정의 배움을 기록합니다."
+      }
     ]
   },
   "contact": {
-    "eyebrow": "Let's build together",
-    "headline": "함께 만들어갈 프로덕트가 있다면",
-    "description": "커피 한 잔 사주세요. 비즈니스 얘기 나눠봐요.",
-    "emailLabel": "이메일 보내기"
+    "eyebrow": "Contact",
+    "headline": "이야기를 남겨주세요",
+    "description": "프로젝트와 협업, 혹은 서로의 관심사에 대한 가벼운 대화를 환영합니다.",
+    "emailLabel": "이메일 주소 복사"
   },
   "projects": [
     {
       "id": "mobile-ai-product",
-      "title": "모바일 AI 프로덕트",
+      "title": "A-Voice Chat",
       "category": "Product",
-      "description": "AI 기반 모바일 프로덕트의 기획부터 개발, 출시 준비까지 리드하고 있습니다.",
+      "description": "고품질 성우 음성 기반 AI 캐릭터 보이스챗. 10월 초 베타테스트 후 11월 초 Google Play Store와 App Store 정식 출시 예정입니다.",
       "tags": ["Product Strategy", "AI", "Mobile"],
-      "thumbnail": "/images/projects/product-mobile.png",
+      "thumbnail": "/images/projects/a-voice-chat-logo-mint.png",
       "thumbnailPosition": "center",
       "links": {
         "live": "",
@@ -51,11 +62,11 @@
     },
     {
       "id": "b2b-web-product",
-      "title": "B2B 웹 프로덕트",
+      "title": "에틱스타",
       "category": "Product",
-      "description": "비즈니스 고객의 업무 문제를 정의하고 웹 기반 솔루션을 설계하고 있습니다.",
+      "description": "청소년을 위한 AI 윤리 리터러시 학습 웹 보드게임. 런칭 준비 중입니다.",
       "tags": ["B2B", "Product Design", "Web"],
-      "thumbnail": "/images/projects/product-web.png",
+      "thumbnail": "/images/projects/etikstar-boardgame.png",
       "thumbnailPosition": "center",
       "links": {
         "live": "",
@@ -70,15 +81,15 @@
       "id": "heogayo-legal-rag",
       "title": "허가요 — 법률 RAG 챗봇",
       "category": "AI / RAG",
-      "description": "법률·조례 질의에 근거 기반 답변을 제공하는 팀 웹서비스입니다. AI 챗봇 파트에서 LangGraph RAG 파이프라인, Qdrant 검색, Gemini 연동과 법률 데이터 전처리를 담당했습니다.",
-      "tags": ["LangGraph", "Qdrant", "Gemini", "FastAPI"],
+      "description": "법률·조례 정보를 쉽게 찾고 이해할 수 있도록, 사용자의 질문에 관련 근거와 함께 답변하는 법률 RAG 챗봇 웹서비스입니다.\n\nAI 챗봇 파트를 맡아 법률 데이터를 검색 가능한 형태로 수집·정제하고, LangGraph 기반 RAG 파이프라인과 Qdrant 벡터 검색 구조를 설계·구현했습니다. 검색된 법률 근거가 답변 생성 과정에 반영되도록 생성 모델을 연동하고, 질의부터 검색·답변 생성까지의 흐름을 연결했습니다.",
+      "tags": ["LangGraph", "Qdrant", "RAG", "FastAPI"],
       "thumbnail": "/images/projects/study-1.png",
       "thumbnailPosition": "center",
       "links": {
         "live": "",
         "github": "https://github.com/Sondanha/rag-legal",
         "secondary": "https://github.com/Sondanha/law_data_pre-processing",
-        "secondaryLabel": "Data Repo"
+        "secondaryLabel": "Data Repository"
       },
       "featured": false,
       "gridSpan": "small"
@@ -87,7 +98,7 @@
       "id": "polo-paper-ai",
       "title": "POLO — AI 논문 이해 도우미",
       "category": "Team Project",
-      "description": "학술 논문을 쉬운 설명과 시각 자료로 변환하는 AI 플랫폼입니다. TeX 원문을 청크·수식·교차참조 구조로 변환하는 전처리 파이프라인을 구현하고 문서화했습니다.",
+      "description": "복잡한 학술 논문을 쉬운 설명과 시각 자료로 재구성해, 연구 내용을 더 빠르고 직관적으로 이해하도록 돕는 AI 논문 학습 플랫폼입니다.\n\n논문 전처리 파트를 맡아 TeX 원문의 문서 구조를 분석하고, 본문 청크·수식·교차참조가 보존되는 데이터 변환 파이프라인을 구현했습니다. 후속 AI 처리에서 일관된 입력으로 활용할 수 있도록 전처리 기준과 흐름을 문서화했습니다.",
       "tags": ["Python", "LaTeX", "Data Pipeline", "RAG"],
       "thumbnail": "/images/projects/study-2.png",
       "thumbnailPosition": "center",
@@ -104,7 +115,7 @@
       "id": "patent-llama-finetuning",
       "title": "Patent-LLAMA — LLM Fine-tuning",
       "category": "LLM Training",
-      "description": "특허·법률 QA 데이터로 Llama 3.2 3B를 SFT·QLoRA 방식으로 학습하고, GGUF 변환과 로컬 라우터 적용까지 구현한 팀 프로젝트입니다.",
+      "description": "범용 LLM이 특허·법률 분야의 질문에 더 적합하게 응답하도록, 전문 QA 데이터로 학습한 도메인 특화 모델 프로젝트입니다.\n\n모델 학습 파트를 맡아 Llama 3.2 3B를 SFT·QLoRA 방식으로 파인튜닝하고, 학습 결과를 GGUF로 변환했습니다. 이어 llama.cpp 기반 로컬 환경에서 모델을 실행하고 라우터에 연결하는 과정까지 구현했습니다.",
       "tags": ["Llama 3.2", "SFT", "QLoRA", "llama.cpp"],
       "thumbnail": "/images/projects/study-3.png",
       "thumbnailPosition": "center",
@@ -121,7 +132,7 @@
       "id": "crate-selection-platform",
       "title": "CRATE — 선발 운영 플랫폼",
       "category": "Backend / 2인 팀",
-      "description": "2025.12–2026.01 기획·프론트엔드를 맡은 팀원과 2인으로 진행한 지원서 수집·평가 플랫폼 MVP입니다. 백엔드를 맡아 NestJS·PostgreSQL·Prisma 기반 인증과 폼·문항·응답 API, 서버 중심 권한 검증 구조를 설계하고 구현했습니다.",
+      "description": "지원서 생성·수집부터 평가와 선발까지 하나의 흐름으로 관리해, 반복적인 운영 업무를 줄이고 효율적인 선발을 돕는 플랫폼 MVP입니다.\n\n백엔드 개발을 맡아 NestJS·PostgreSQL·Prisma 기반 인증 구조와 폼·문항·응답 API를 설계·구현했습니다. 사용자 역할과 리소스 소유권을 서버에서 검증하도록 권한 구조를 구성해 선발 데이터가 안전하게 관리되도록 했습니다.",
       "tags": ["NestJS", "PostgreSQL", "Prisma", "JWT"],
       "thumbnail": "/images/projects/crate.png",
       "thumbnailPosition": "top",
@@ -129,7 +140,7 @@
         "live": "",
         "github": "https://github.com/indigo-net/be-crate",
         "secondary": "https://github.com/indigo-net/fe-crate",
-        "secondaryLabel": "Frontend"
+        "secondaryLabel": "Frontend Repository"
       },
       "featured": false,
       "gridSpan": "small"
@@ -168,17 +179,17 @@
   "timeline": [
     {
       "id": "gdg-hufs",
-      "period": "2026.09 ~ 2027.07",
+      "period": "2026.09 ~ 2027.08 (예정)",
       "title": "GDG on Campus HUFS",
-      "description": "활동",
+      "description": "멤버 활동",
       "type": "activity",
       "link": ""
     },
     {
       "id": "academic-paper",
-      "period": "2026",
-      "title": "제11회 산재보험패널 학술대회 포스터 논문 등재 및 발표",
-      "description": "산재 노동자 복귀 관련 / 근로복지공단",
+      "period": "2026.05",
+      "title": "제11회 산재보험패널 학술대회 포스터 논문 등재",
+      "description": "산재 노동자의 경제적 복귀 경로 유형화와 결정요인 분석:\n소득 회복률과 잠재성장모형을 중심으로",
       "type": "achievement",
       "link": ""
     },
@@ -192,17 +203,17 @@
     },
     {
       "id": "meta-workshop",
-      "period": "2025.10",
-      "title": "Meta 주최 LLM Agent & On-device AI 워크숍 수료",
-      "description": "",
+      "period": "2025.09.30 ~ 2025.10.02",
+      "title": "LLM Agent & On-device AI Workshop 1기 수료",
+      "description": "Meta, 한국전파진흥협회, 업스테이지 주최",
       "type": "education",
       "link": ""
     },
     {
       "id": "datafirst",
       "period": "2025.09 ~ 2026.01",
-      "title": "데이터분석 연합동아리 'DataFirst(df)' 활동",
-      "description": "",
+      "title": "데이터분석 연합동아리 DF",
+      "description": "DF 멤버 활동",
       "type": "activity",
       "link": ""
     },
@@ -210,15 +221,15 @@
       "id": "employment-ai",
       "period": "2025.03 ~ 2025.09",
       "title": "고용노동부 AI 소프트웨어 개발 과정 수료",
-      "description": "성적 1위 수상 (940시간)",
+      "description": "성적 1위 수상",
       "type": "education",
       "link": ""
     },
     {
       "id": "hufs",
-      "period": "2023.03 ~ 현재",
+      "period": "2023.03 ~ 2028.03 (예정)",
       "title": "한국외국어대학교 경영학전공",
-      "description": "재학 중",
+      "description": "",
       "type": "education",
       "link": ""
     }

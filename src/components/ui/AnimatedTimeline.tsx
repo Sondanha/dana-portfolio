@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 
 interface TimelineItemData {
@@ -14,31 +14,71 @@ interface AnimatedTimelineProps {
   readonly items: readonly TimelineItemData[];
 }
 
-const TYPE_STYLES: Record<string, { dot: string; badge: string }> = {
+const TYPE_STYLES: Record<string, { dot: string; badge: string; label: string }> = {
   achievement: {
     dot: 'bg-[var(--color-accent)]',
     badge: 'text-[var(--color-accent)] bg-[var(--color-accent-subtle)]',
+    label: 'Achievement',
   },
   education: {
     dot: 'bg-[var(--color-success)]',
     badge: 'text-[var(--color-success)] bg-[rgba(34,197,94,0.1)]',
+    label: 'Education',
   },
   activity: {
     dot: 'bg-[var(--color-warning)]',
     badge: 'text-[var(--color-warning)] bg-[rgba(234,179,8,0.1)]',
+    label: 'Activity',
   },
 } as const;
 
+const FILTERS = [
+  { value: 'all', label: 'All' },
+  { value: 'activity', label: 'Activity' },
+  { value: 'education', label: 'Education' },
+  { value: 'achievement', label: 'Achievement' },
+] as const;
+
+type TimelineFilter = (typeof FILTERS)[number]['value'];
+
 /** Animated timeline with staggered reveal on scroll. */
 export default function AnimatedTimeline({ items }: AnimatedTimelineProps): ReactNode {
+  const [activeFilter, setActiveFilter] = useState<TimelineFilter>('all');
+  const filteredItems = activeFilter === 'all'
+    ? items
+    : items.filter((item) => item.type === activeFilter);
+
   return (
     <LazyMotion features={domAnimation}>
-      <div className="relative">
-        {/* Vertical line */}
-        <div className="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-[var(--color-border)] via-[var(--color-border)] to-transparent sm:left-1/2 sm:-translate-x-px" />
+      <div>
+        <div className="mb-12 flex flex-wrap gap-2" role="group" aria-label="타임라인 유형 필터">
+          {FILTERS.map((filter) => {
+            const isActive = activeFilter === filter.value;
 
-        <div className="space-y-8 sm:space-y-12">
-          {items.map((item, index) => {
+            return (
+              <button
+                key={filter.value}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => setActiveFilter(filter.value)}
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+                  isActive
+                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_8px_20px_rgba(197,75,50,0.16)]'
+                    : 'border-[var(--color-border)] bg-transparent text-[var(--color-text-secondary)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]'
+                }`}
+              >
+                {filter.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="relative">
+          {/* Vertical line */}
+          <div className="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-[var(--color-border)] via-[var(--color-border)] to-transparent sm:left-1/2 sm:-translate-x-px" />
+
+          <div className="space-y-8 sm:space-y-12">
+          {filteredItems.map((item, index) => {
             const style = TYPE_STYLES[item.type] ?? TYPE_STYLES.activity;
             const isLeft = index % 2 === 0;
 
@@ -53,6 +93,7 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
                   delay: index * 0.08,
                   ease: [0.16, 1, 0.3, 1],
                 }}
+                layout
                 className="relative flex items-start gap-6 sm:gap-0"
               >
                 {/* Desktop: alternating left/right */}
@@ -80,10 +121,10 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
                       )}
                     </h3>
                     {item.description && (
-                      <p className="text-sm text-[var(--color-text-secondary)]">{item.description}</p>
+                      <p className="whitespace-pre-line text-sm text-[var(--color-text-secondary)]">{item.description}</p>
                     )}
-                    <span className={`mt-3 inline-block rounded-md px-2.5 py-0.5 text-xs font-semibold capitalize ${style.badge}`}>
-                      {item.type}
+                    <span className={`mt-3 inline-block rounded-md px-2.5 py-0.5 text-xs font-semibold ${style.badge}`}>
+                      {style.label}
                     </span>
                   </div>
                 </div>
@@ -122,15 +163,16 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
                     )}
                   </h3>
                   {item.description && (
-                    <p className="text-sm text-[var(--color-text-secondary)]">{item.description}</p>
+                    <p className="whitespace-pre-line text-sm text-[var(--color-text-secondary)]">{item.description}</p>
                   )}
-                  <span className={`mt-2 inline-block rounded-md px-2.5 py-0.5 text-xs font-semibold capitalize ${style.badge}`}>
-                    {item.type}
+                  <span className={`mt-2 inline-block rounded-md px-2.5 py-0.5 text-xs font-semibold ${style.badge}`}>
+                    {style.label}
                   </span>
                 </div>
               </m.div>
             );
           })}
+          </div>
         </div>
       </div>
     </LazyMotion>

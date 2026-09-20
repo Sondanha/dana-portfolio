@@ -1,75 +1,159 @@
 ---
-import portfolioData from '../../data/portfolio.json';
+interface NavItem {
+  readonly label: string;
+  readonly href: string;
+}
 
-const navItems = [
-  { label: 'Now', href: '#now' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Timeline', href: '#timeline' },
-  { label: 'Contact', href: '#contact' },
+interface Props {
+  readonly navItems?: readonly NavItem[];
+  readonly enableMegaMenu?: boolean;
+}
+
+const defaultNavItems = [
+  { label: 'About', href: '/#about' },
+  { label: 'Projects', href: '/#projects' },
+  { label: 'Skills', href: '/#skills' },
+  { label: 'Timeline', href: '/#timeline' },
 ] as const;
 
-const { meta } = portfolioData;
+const { navItems = defaultNavItems, enableMegaMenu = false } = Astro.props;
+const hasNavigation = navItems.length > 0;
+
+const megaNavGroups = [
+  {
+    label: 'About',
+    items: [],
+  },
+  {
+    label: 'Projects',
+    items: [
+      { label: 'Product', href: '/product' },
+      { label: 'Study Projects', href: '/study' },
+    ],
+  },
+  {
+    label: 'Skills',
+    items: [],
+  },
+  {
+    label: 'Timeline',
+    items: [],
+  },
+] as const;
 ---
 
 <header
-  class="fixed top-0 left-0 right-0 z-50 border-b border-transparent transition-all duration-300"
+  class="fixed top-0 left-0 right-0 z-50 px-3 transition-all duration-300 sm:px-4"
   id="site-header"
 >
-  <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+  <nav class="header-nav-shell mx-auto mt-0 flex max-w-7xl items-center border border-transparent px-4 py-3 transition-all duration-300 sm:px-6">
     <a
       href="/"
-      class="text-lg font-bold tracking-tight text-[var(--color-text-primary)] transition-colors hover:text-[var(--color-accent)]"
+      class="inline-flex shrink-0 items-center transition-transform hover:scale-105"
+      aria-label="홈으로 이동"
     >
-      {meta.name}
+      <img src="/favicon.png" alt="" class="h-12 w-12 object-contain" width="48" height="48" />
     </a>
 
     <!-- Desktop Nav -->
-    <ul class="hidden items-center gap-8 md:flex">
-      {navItems.map((item) => (
-        <li>
-          <a
-            href={item.href}
-            class="text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
-          >
-            {item.label}
-          </a>
-        </li>
-      ))}
-    </ul>
+    {hasNavigation && (
+      <ul class="ml-10 hidden items-center gap-8 md:flex">
+        {navItems.map((item) => (
+          <li class:list={['desktop-nav-item', enableMegaMenu && 'has-mega-menu']}>
+            <a
+              href={item.href}
+              class="inline-flex items-center gap-1.5 text-base font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
+              aria-haspopup={enableMegaMenu ? 'true' : undefined}
+            >
+              {item.label}
+            </a>
+
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <a
+      href="/contact"
+      class="header-contact-button ml-auto hidden items-center rounded-lg border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-2.5 text-sm font-normal text-white transition-colors duration-200 hover:bg-[var(--color-accent-hover)] md:inline-flex"
+    >
+      Contact Me!
+    </a>
 
     <!-- Mobile Menu Button -->
-    <button
-      id="mobile-menu-toggle"
-      class="flex h-10 w-10 items-center justify-center rounded-lg text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg-card)] md:hidden"
-      aria-label="메뉴 열기"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-    >
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
+    {hasNavigation && (
+      <button
+        id="mobile-menu-toggle"
+        class="ml-auto flex h-10 w-10 items-center justify-center rounded-lg text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg-card)] md:hidden"
+        aria-label="메뉴 열기"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    )}
   </nav>
 
+  {enableMegaMenu && (
+    <div class="project-menu-extension mx-auto hidden max-w-7xl md:block">
+      <div class="grid grid-cols-4">
+        {megaNavGroups.map((group, index) => (
+          <section class:list={['min-h-56 px-8 py-7', index > 0 && 'border-l border-[var(--color-border)]']}>
+            <h2 class="text-sm font-medium text-[var(--color-text-primary)]">{group.label}</h2>
+            <div class="mt-5 flex flex-col items-start gap-3">
+              {group.items.map((menuItem) => (
+                <a href={menuItem.href} class="project-menu-link inline-flex items-center gap-2 text-base font-normal text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]">
+                  <span>{menuItem.label}</span>
+                  <span class="project-menu-link-arrow" aria-hidden="true">→</span>
+                </a>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </div>
+  )}
+
   <!-- Mobile Menu -->
-  <div
-    id="mobile-menu"
-    class="hidden border-t border-[var(--color-border)] bg-[var(--color-bg-primary)]/95 backdrop-blur-xl md:hidden"
-  >
-    <ul class="flex flex-col px-6 py-4">
-      {navItems.map((item) => (
+  {hasNavigation && (
+    <div
+      id="mobile-menu"
+      class="hidden border-t border-[var(--color-border)] bg-[var(--color-bg-primary)]/95 backdrop-blur-xl md:hidden"
+    >
+      <ul class="flex flex-col px-6 py-4">
+        {enableMegaMenu ? megaNavGroups.map((group) => (
+          <li class="border-b border-[var(--color-border)] py-3 last:border-0">
+            <a
+              href={navItems.find((item) => item.label === group.label)?.href || '/'}
+              class="mobile-nav-link block text-sm font-medium text-[var(--color-text-primary)]"
+            >
+              {group.label}
+            </a>
+            <div class="mt-2 flex flex-wrap gap-x-4 gap-y-2">
+              {group.items.map((menuItem) => (
+                <a href={menuItem.href} class="mobile-nav-link text-sm font-normal text-[var(--color-accent)]">
+                  {menuItem.label}
+                </a>
+              ))}
+            </div>
+          </li>
+        )) : navItems.map((item) => (
+          <li>
+            <a href={item.href} class="mobile-nav-link block py-3 text-base font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]">
+              {item.label}
+            </a>
+          </li>
+        ))}
         <li>
-          <a
-            href={item.href}
-            class="mobile-nav-link block py-3 text-base font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
-          >
-            {item.label}
+          <a href="/contact" class="mobile-nav-link mt-2 block w-full rounded-lg border border-[var(--color-accent)] bg-[var(--color-accent)] px-4 py-3 text-center text-sm font-normal text-white transition-colors hover:bg-white hover:text-[var(--color-accent)]">
+            Contact Me!
           </a>
         </li>
-      ))}
-    </ul>
-  </div>
+      </ul>
+    </div>
+  )}
 </header>
 
 <script>
@@ -77,16 +161,10 @@ const { meta } = portfolioData;
   const mobileToggle = document.getElementById('mobile-menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
 
-  // Scroll effect: add background on scroll
+  // Scroll effect: turn the navigation into a floating white card.
   function handleScroll(): void {
     if (!header) return;
-    if (window.scrollY > 20) {
-      header.classList.add('bg-[var(--color-bg-primary)]/80', 'backdrop-blur-xl', 'border-[var(--color-border)]');
-      header.classList.remove('border-transparent');
-    } else {
-      header.classList.remove('bg-[var(--color-bg-primary)]/80', 'backdrop-blur-xl', 'border-[var(--color-border)]');
-      header.classList.add('border-transparent');
-    }
+    header.classList.toggle('is-scrolled', window.scrollY > 20);
   }
 
   // Mobile menu toggle
@@ -96,6 +174,7 @@ const { meta } = portfolioData;
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll();
   mobileToggle?.addEventListener('click', toggleMobileMenu);
 
   // Close mobile menu on link click
@@ -106,3 +185,65 @@ const { meta } = portfolioData;
     });
   });
 </script>
+
+<style>
+  .desktop-nav-item {
+    position: relative;
+  }
+
+  .has-mega-menu::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 1.75rem;
+  }
+
+  .project-menu-extension {
+    margin-top: -1px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+    border-radius: 0 0 0.75rem 0.75rem;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 22px 36px rgba(23, 36, 62, 0.1);
+    backdrop-filter: blur(18px);
+    transition: max-height 320ms var(--ease-out-expo), opacity 180ms ease, visibility 180ms ease;
+  }
+
+  .project-menu-link-arrow {
+    opacity: 0;
+    transform: translateX(-0.35rem);
+    transition: opacity 160ms ease, transform 220ms var(--ease-out-expo);
+  }
+
+  .project-menu-link:hover .project-menu-link-arrow,
+  .project-menu-link:focus-visible .project-menu-link-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  #site-header:has(.has-mega-menu:hover) .project-menu-extension,
+  #site-header:has(.has-mega-menu:focus-within) .project-menu-extension,
+  .project-menu-extension:hover,
+  .project-menu-extension:focus-within {
+    max-height: 18rem;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  #site-header:has(.has-mega-menu:hover) .header-nav-shell,
+  #site-header:has(.has-mega-menu:focus-within) .header-nav-shell,
+  #site-header:has(.project-menu-extension:hover) .header-nav-shell,
+  #site-header:has(.project-menu-extension:focus-within) .header-nav-shell {
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+
+</style>

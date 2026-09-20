@@ -6,18 +6,21 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer class="border-t border-[var(--color-border)] bg-[var(--color-bg-primary)]">
-  <div class="mx-auto max-w-6xl px-6 py-12">
-    <div class="flex flex-col items-center justify-between gap-6 md:flex-row">
+  <div class="mx-auto w-full max-w-[90rem] px-6 py-14 sm:px-10 lg:px-12">
+    <div class="flex flex-col items-center justify-between gap-8 md:flex-row">
       <!-- Left: Name & Copyright -->
-      <div class="text-center md:text-left">
-        <p class="text-sm font-semibold text-[var(--color-text-primary)]">{meta.name}</p>
-        <p class="mt-1 text-xs text-[var(--color-text-tertiary)]">
-          &copy; {currentYear} All rights reserved.
-        </p>
-      </div>
+      <a href="/" class="flex items-center gap-3.5" aria-label="홈으로 이동">
+        <img src="/favicon.png" alt="" class="h-11 w-11 shrink-0 object-contain" width="44" height="44" />
+        <span class="text-left">
+          <span class="block text-sm font-semibold text-[var(--color-text-primary)]">{meta.name}</span>
+          <span class="mt-1 block text-xs text-[var(--color-text-tertiary)]">
+            &copy; {currentYear} All rights reserved.
+          </span>
+        </span>
+      </a>
 
       <!-- Right: Social Links -->
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-5">
         {meta.github && (
           <a
             href={meta.github}

@@ -8,8 +8,8 @@ interface Props {
 }
 
 const {
-  title = 'Son Danha | Product Owner & IT Leader',
-  description = '경영학을 기반으로 AI 에이전트와 BaaS를 활용해 프로덕트를 빠르게 런칭하는 IT 리더',
+  title = 'Son Danha | Product-minded Developer',
+  description = '경영학의 비즈니스·조직 이해를 바탕으로 기획과 제품 설계부터 구현까지 함께하는 개발자 손단하의 포트폴리오',
   ogImage = '/og-image.png',
 } = Astro.props;
 
@@ -26,6 +26,24 @@ const siteUrl = new URL('/', Astro.site).toString();
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
+    <script is:inline>
+      console.log(
+        String.raw`%c
+  ____   ___  _   _   ____    _    _   _ _   _    _
+ / ___| / _ \| \ | | |  _ \  / \  | \ | | | | |  / \
+ \___ \| | | |  \| | | | | |/ _ \ |  \| | |_| | / _ \
+  ___) | |_| | |\  | | |_| / ___ \| |\  |  _  |/ ___ \
+ |____/ \___/|_| \_| |____/_/   \_\_| \_|_| |_/_/   \_\
+`,
+        'color:#c54b32;font:700 12px/1.15 ui-monospace,SFMono-Regular,Consolas,monospace;'
+      );
+      console.log(
+        '%c[ DH / PORTFOLIO ]%c  BUSINESS × AI × PRODUCT\n> https://sondanha.pages.dev\n> Thanks for looking under the hood.',
+        'color:#17243e;font:700 12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;',
+        'color:#7d8799;font:500 12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;'
+      );
+    </script>
+
     <!-- SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -39,7 +57,7 @@ const siteUrl = new URL('/', Astro.site).toString();
     <meta property="og:image" content={absoluteOgImage} />
     <meta property="og:image:width" content="1672" />
     <meta property="og:image:height" content="941" />
-    <meta property="og:image:alt" content="비즈니스와 AI의 연결을 표현한 3D 일러스트레이션" />
+    <meta property="og:image:alt" content="손단하의 Product Owner 포트폴리오" />
     <meta property="og:locale" content="ko_KR" />
 
     <!-- Twitter -->
@@ -69,7 +87,7 @@ const siteUrl = new URL('/', Astro.site).toString();
         '@type': 'Person',
         name: 'Son Danha',
         url: siteUrl,
-        jobTitle: 'Product Owner & IT Leader',
+        jobTitle: 'Product-minded Developer',
         alumniOf: {
           '@type': 'CollegeOrUniversity',
           name: '한국외국어대학교',
