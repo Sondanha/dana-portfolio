@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Son Danha portfolio social preview</title>
+  <desc id="description">Business meets AI, 개발자 손단하입니다.</desc>
+  <defs>
+    <linearGradient id="base" x1="80" y1="40" x2="1120" y2="590" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4f6fa" />
+      <stop offset="0.48" stop-color="#dbe3ee" />
+      <stop offset="1" stop-color="#b8c6da" />
+    </linearGradient>
+    <linearGradient id="navy" x1="760" y1="30" x2="1120" y2="610" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#42516a" />
+      <stop offset="0.45" stop-color="#172946" />
+      <stop offset="1" stop-color="#0d1b36" />
+    </linearGradient>
+    <linearGradient id="rose" x1="560" y1="20" x2="1120" y2="570" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e2b7c1" />
+      <stop offset="0.52" stop-color="#b85f73" />
+      <stop offset="1" stop-color="#7d3a4f" />
+    </linearGradient>
+    <linearGradient id="logo" x1="0" y1="0" x2="150" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0d1b36" />
+      <stop offset="0.56" stop-color="#974b60" />
+      <stop offset="1" stop-color="#d791a1" />
+    </linearGradient>
+    <linearGradient id="soft-light" x1="420" y1="130" x2="1050" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.82" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="28" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#base)" />
+
+  <path d="M790 -110C1010 -42 1190 30 1315 184L1288 704C1054 690 854 596 728 452C617 326 625 109 790 -110Z" fill="url(#navy)" />
+  <path d="M508 -132C716 -36 936 24 1207 104C1090 184 1000 280 929 397C768 326 614 260 438 207C458 85 481 -29 508 -132Z" fill="url(#rose)" opacity="0.95" />
+  <path d="M575 630C719 489 852 392 1009 320C1093 282 1162 264 1245 250L1275 486C1112 504 939 558 795 659Z" fill="#d791a1" opacity="0.68" />
+  <path d="M498 1C657 82 772 150 874 246C774 300 695 365 630 454C558 361 472 298 359 242C399 143 444 63 498 1Z" fill="url(#soft-light)" opacity="0.72" />
+  <ellipse cx="710" cy="492" rx="250" ry="104" fill="#ffffff" opacity="0.42" filter="url(#blur)" />
+
+  <rect x="0" y="0" width="700" height="630" fill="url(#soft-light)" opacity="0.52" />
+
+  <g transform="translate(76 54) scale(.58)" fill="none" stroke="url(#logo)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M62 20v68" />
+    <path d="M61.5 57c0-15-9.5-25-23-25S15 43 15 60.5 24.5 89 38.5 89 62 78.5 62 61" />
+    <path d="M88 20v68" />
+    <path d="M88 58c0-15.5 9.5-26 23.5-26S135 42.5 135 58v30" />
+  </g>
+
+  <text x="72" y="292" fill="#0d1b36" font-family="Inter, Arial, sans-serif" font-size="64" font-weight="800" letter-spacing="-2.5">Business meets AI</text>
+  <text x="72" y="380" fill="#0d1b36" font-family="Pretendard, 'Malgun Gothic', Arial, sans-serif" font-size="58" font-weight="800" letter-spacing="-2">
+    <tspan>개발자</tspan><tspan dx="14" fill="#974b60">손단하</tspan><tspan dx="14">입니다</tspan>
+  </text>
+</svg>

@@ -1,4 +1,7 @@
 ---
+import LiquidNavGlass from '../ui/LiquidNavGlass';
+import { LiquidContactButton } from '../ui/LiquidHeroGlass';
+
 interface NavItem {
   readonly label: string;
   readonly href: string;
@@ -55,13 +58,17 @@ const megaNavGroups = [
   class="fixed top-0 left-0 right-0 z-50 px-3 transition-all duration-300 sm:px-4"
   id="site-header"
 >
+  <div class="header-refraction-stage" aria-hidden="true">
+    <LiquidNavGlass client:load />
+  </div>
+
   <nav class="header-nav-shell mx-auto mt-0 flex max-w-7xl items-center border border-transparent px-4 py-3 transition-all duration-300 sm:px-6">
     <a
       href="/"
       class="inline-flex shrink-0 items-center transition-transform hover:scale-105"
       aria-label="홈으로 이동"
     >
-      <img src="/favicon.png" alt="" class="h-12 w-12 object-contain" width="48" height="48" />
+      <img src="/dh-logo.svg" alt="" class="h-12 w-12 object-contain" width="48" height="48" />
     </a>
 
     <!-- Desktop Nav -->
@@ -82,18 +89,15 @@ const megaNavGroups = [
       </ul>
     )}
 
-    <a
-      href="/contact"
-      class="header-contact-button ml-auto hidden items-center rounded-lg border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-2.5 text-sm font-normal text-white transition-colors duration-200 hover:bg-[var(--color-accent-hover)] md:inline-flex"
-    >
-      Contact Me!
-    </a>
+    <div class="ml-auto hidden md:block">
+      <LiquidContactButton compact icon="none" client:load />
+    </div>
 
     <!-- Mobile Menu Button -->
     {hasNavigation && (
       <button
         id="mobile-menu-toggle"
-        class="ml-auto flex h-10 w-10 items-center justify-center rounded-lg text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg-card)] md:hidden"
+        class="ml-auto flex h-10 w-10 items-center justify-center rounded-full text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg-card)] md:hidden"
         aria-label="메뉴 열기"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -129,7 +133,7 @@ const megaNavGroups = [
   {hasNavigation && (
     <div
       id="mobile-menu"
-      class="hidden border-t border-[var(--color-border)] bg-[var(--color-bg-primary)]/95 backdrop-blur-xl md:hidden"
+      class="mx-auto mt-2 hidden max-w-7xl overflow-hidden rounded-[36px] border border-white/75 bg-white/70 shadow-[inset_0_1px_0_white,0_18px_48px_rgba(47,65,91,0.14)] backdrop-blur-2xl md:hidden"
     >
       <ul class="flex flex-col px-6 py-4">
         {enableMegaMenu ? megaNavGroups.map((group) => (
@@ -156,9 +160,9 @@ const megaNavGroups = [
           </li>
         ))}
         <li>
-          <a href="/contact" class="mobile-nav-link mt-2 block w-full rounded-lg border border-[var(--color-accent)] bg-[var(--color-accent)] px-4 py-3 text-center text-sm font-normal text-white transition-colors hover:bg-white hover:text-[var(--color-accent)]">
-            Contact Me!
-          </a>
+          <div class="mt-3">
+            <LiquidContactButton fullWidth icon="none" client:load />
+          </div>
         </li>
       </ul>
     </div>
@@ -210,20 +214,21 @@ const megaNavGroups = [
   }
 
   .project-menu-extension {
-    margin-top: -1px;
+    position: relative;
+    z-index: 2;
+    margin-top: 0;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    border-right: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-    border-left: 1px solid var(--color-border);
-    border-radius: 0 0 0.75rem 0.75rem;
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 22px 36px rgba(23, 36, 62, 0.1);
-    backdrop-filter: blur(18px);
-    transition: max-height 320ms var(--ease-out-expo), opacity 180ms ease, visibility 180ms ease;
+    border: 0;
+    border-radius: 0 0 36px 36px;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: max-height 360ms var(--ease-out-expo), opacity 180ms ease, visibility 180ms ease;
   }
 
   .project-menu-link-arrow {
@@ -242,7 +247,7 @@ const megaNavGroups = [
   #site-header:has(.has-mega-menu:focus-within) .project-menu-extension,
   .project-menu-extension:hover,
   .project-menu-extension:focus-within {
-    max-height: 18rem;
+    max-height: 14rem;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -252,7 +257,6 @@ const megaNavGroups = [
   #site-header:has(.has-mega-menu:focus-within) .header-nav-shell,
   #site-header:has(.project-menu-extension:hover) .header-nav-shell,
   #site-header:has(.project-menu-extension:focus-within) .header-nav-shell {
-    border-radius: 0.75rem 0.75rem 0 0;
+    border-radius: 36px;
   }
-
 </style>

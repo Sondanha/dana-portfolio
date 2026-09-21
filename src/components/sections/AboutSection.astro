@@ -1,5 +1,6 @@
 ---
 import portfolioData from '../../data/portfolio.json';
+import AboutGlassSurface from '../ui/AboutGlassSurface';
 
 const { about, meta } = portfolioData;
 ---
@@ -33,19 +34,19 @@ const { about, meta } = portfolioData;
       </div>
 
       <div class="about-values-wrap relative">
-        <div class="about-card-shapes" aria-hidden="true">
-          <span class="about-shape about-shape-square"></span>
-          <span class="about-shape about-shape-triangle"></span>
-          <span class="about-shape about-shape-diamond"></span>
+        <div class="about-refraction-stage" aria-hidden="true">
+          <AboutGlassSurface client:load />
         </div>
-
-        <ol class="about-values-grid relative z-10 grid h-full overflow-hidden rounded-xl border border-[var(--color-border)] bg-transparent sm:grid-cols-2" data-about-grid>
+        <ol class="about-values-grid relative z-10 grid h-full overflow-clip rounded-[36px] sm:grid-cols-2" data-about-grid>
           {about.values.map((value, index) => (
-            <li class="about-value-slot relative min-h-48">
+            <li class="about-value-slot relative min-h-36 sm:min-h-64">
               <article class="about-value-card" tabindex="0" data-about-card>
-                <span class="absolute right-6 top-5 font-mono text-xs font-bold text-[var(--color-border-hover)]">0{index + 1}</span>
-                <h3 class="text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">{value.title}</h3>
-                <p class="about-value-description mt-7 max-w-md text-base font-semibold leading-relaxed text-[var(--color-text-primary)]">{value.description}</p>
+                <div class="card-glass-layer" aria-hidden="true">
+                  <AboutGlassSurface client:load className="card-glass-surface" />
+                </div>
+                <span class="card-index-badge" aria-hidden="true">0{index + 1}</span>
+                <h3 class="card-content text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">{value.title}</h3>
+                <p class="card-content about-value-description mt-6 text-base font-semibold leading-relaxed text-[var(--color-text-primary)]">{value.description}</p>
               </article>
             </li>
           ))}
@@ -66,18 +67,44 @@ const { about, meta } = portfolioData;
   let autoPlayIndex = 0;
   let isAboutVisible = false;
 
+  const EXPAND_DURATION_MS = 900;
+
   const showBaseGrid = (): void => {
-    aboutGrid?.classList.remove('has-expanded-card');
     aboutCards.forEach((card) => {
-      card.classList.remove('is-auto-expanded', 'is-expanded');
+      if (card.classList.contains('is-expanded')) {
+        card.classList.add('is-collapsing');
+        card.classList.remove('content-visible', 'is-auto-expanded', 'is-expanded');
+        window.setTimeout(() => {
+          aboutGrid?.classList.remove('has-expanded-card');
+        }, 150);
+        window.setTimeout(() => {
+          card.classList.remove('is-collapsing');
+        }, EXPAND_DURATION_MS + 100);
+      } else {
+        aboutGrid?.classList.remove('has-expanded-card');
+        card.classList.remove('is-auto-expanded', 'is-expanded', 'content-visible');
+      }
     });
+  };
+
+  let contentVisibleTimer: number | undefined;
+
+  const expandCard = (card: HTMLElement): void => {
+    card.classList.add('is-expanded', 'is-auto-expanded');
+    aboutGrid?.classList.add('has-expanded-card');
+    if (contentVisibleTimer) window.clearTimeout(contentVisibleTimer);
+    contentVisibleTimer = window.setTimeout(() => {
+      card.classList.add('content-visible');
+    }, EXPAND_DURATION_MS);
   };
 
   const stopAutoPlay = (): void => {
     if (autoPlayTimer) window.clearTimeout(autoPlayTimer);
     if (autoPlayResumeTimer) window.clearTimeout(autoPlayResumeTimer);
+    if (contentVisibleTimer) window.clearTimeout(contentVisibleTimer);
     autoPlayTimer = undefined;
     autoPlayResumeTimer = undefined;
+    contentVisibleTimer = undefined;
     showBaseGrid();
   };
 
@@ -86,8 +113,7 @@ const { about, meta } = portfolioData;
 
     showBaseGrid();
     const card = aboutCards[autoPlayIndex % aboutCards.length];
-    card.classList.add('is-expanded', 'is-auto-expanded');
-    aboutGrid?.classList.add('has-expanded-card');
+    expandCard(card);
     autoPlayIndex = (autoPlayIndex + 1) % aboutCards.length;
 
     autoPlayTimer = window.setTimeout(() => {
@@ -136,62 +162,92 @@ const { about, meta } = portfolioData;
 <style>
   .about-values-grid {
     grid-auto-rows: 1fr;
+    background: transparent;
+  }
+
+  .about-refraction-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 36px;
+    pointer-events: none;
+  }
+
+  .about-refraction-stage :global(astro-island) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(.about-refraction-surface) {
+    --lq-tint: rgba(247, 252, 255, 0.08);
+    --lq-tint-deep: rgba(13, 27, 54, 0.025);
+    --lq-rim-hi: rgba(255, 255, 255, 0.96);
+    --lq-rim-lo: rgba(154, 200, 236, 0.34);
+    --lq-highlight: rgba(255, 255, 255, 0.78);
+    --lq-shadow: 0 24px 64px rgba(31, 48, 76, 0.12), 0 3px 10px rgba(184, 95, 115, 0.08);
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 확대 카드 내부 글래스 레이어 */
+  .card-glass-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 500ms ease;
+  }
+
+  .card-glass-layer :global(astro-island) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(.card-glass-surface) {
+    --lq-tint: rgba(247, 252, 255, 0.12);
+    --lq-tint-deep: rgba(13, 27, 54, 0.04);
+    --lq-rim-hi: rgba(255, 255, 255, 0.98);
+    --lq-rim-lo: rgba(154, 200, 236, 0.42);
+    --lq-highlight: rgba(255, 255, 255, 0.88);
+    --lq-shadow: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 카드 내 텍스트 — 기본 표시 상태 */
+  .card-content {
+    position: relative;
+    z-index: 1;
+    display: block;
+    opacity: 1;
+    transition: opacity 200ms ease;
+  }
+
+  /* 숫자 배지 — 카드(position:absolute) 기준 우측 상단 */
+  .card-index-badge {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.75rem;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--color-text-secondary);
+    line-height: 1;
+    opacity: 1;
+    transition: opacity 200ms ease;
   }
 
   .about-values-wrap {
     isolation: isolate;
   }
 
-  .about-card-shapes {
-    position: absolute;
-    inset: -3rem;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .about-shape {
-    position: absolute;
-    display: block;
-  }
-
-  .about-shape-square {
-    top: 0.75rem;
-    right: -1rem;
-    width: 11rem;
-    height: 11rem;
-    border: 2px solid rgba(23, 36, 62, 0.08);
-    border-radius: 1.75rem;
-    transform: rotate(14deg);
-  }
-
-  .about-shape-triangle {
-    bottom: -1rem;
-    left: -0.5rem;
-    width: 12rem;
-    height: 11rem;
-    background: rgba(232, 93, 63, 0.055);
-    clip-path: polygon(50% 0, 100% 100%, 0 100%);
-    transform: rotate(-12deg);
-  }
-
-  .about-shape-diamond {
-    right: 35%;
-    bottom: -2.25rem;
-    width: 7rem;
-    height: 7rem;
-    border: 2px solid rgba(242, 184, 75, 0.13);
-    border-radius: 1rem;
-    transform: rotate(45deg);
-  }
-
   .about-value-slot {
-    border-color: var(--color-border);
-    transition: border-color 650ms ease;
-  }
-
-  .about-values-grid.has-expanded-card .about-value-slot {
-    border-color: transparent;
+    transition: none;
   }
 
   .about-values-grid.has-expanded-card .about-value-card:not(.is-expanded) {
@@ -206,9 +262,116 @@ const { about, meta } = portfolioData;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 1px 0 0 rgba(255, 255, 255, 0.08);
+    padding: 2rem;
+    transition:
+      left 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      top 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      width 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      height 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 500ms ease,
+      box-shadow 650ms ease,
+      background 650ms ease,
+      opacity 650ms ease,
+      overflow 0ms 900ms;
+  }
+
+  .about-value-slot:nth-child(1) .about-value-card {
+    border-top-left-radius: 36px;
+  }
+
+  .about-value-slot:nth-child(2) .about-value-card {
+    border-top-right-radius: 36px;
+  }
+
+  .about-value-slot:nth-child(3) .about-value-card {
+    border-bottom-left-radius: 36px;
+  }
+
+  .about-value-slot:nth-child(4) .about-value-card {
+    border-bottom-right-radius: 36px;
+  }
+
+  .about-value-card::after {
+    position: absolute;
+    right: 2rem;
+    bottom: 1.25rem;
+    left: 2rem;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-brand-navy), var(--color-brand-coral));
+    content: '';
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+    z-index: 2;
+  }
+
+  .about-value-card.is-hovered {
+    z-index: 5;
+    border-color: rgba(255, 255, 255, 0.76);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.035));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.72),
+      0 18px 44px rgba(31, 48, 76, 0.1);
+  }
+
+  .about-value-card.is-hovered::after {
+    opacity: 1;
+    animation: about-hover-progress 500ms linear forwards;
+  }
+
+  /* 확장 시작: 텍스트 즉시 숨김 (애니메이션 중) */
+  .about-value-card.is-expanded:not(.content-visible) .card-content,
+  .about-value-card.is-expanded:not(.content-visible) .card-index-badge {
+    opacity: 0;
+    transition: none;
+  }
+
+  /* 축소 중: is-collapsing으로 텍스트 숨김 유지 */
+  .about-value-card.is-collapsing .card-content,
+  .about-value-card.is-collapsing .card-index-badge {
+    opacity: 0;
+    transition: none;
+  }
+
+  /* 확장 완료(content-visible) 후: flex 가운데 정렬로 텍스트 표시 */
+  .about-value-card.is-expanded.content-visible {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .about-value-card.is-expanded.content-visible .card-content {
+    opacity: 1;
+    transition: opacity 350ms ease;
+  }
+
+  /* 확장 완료 시 서브 제목 크기 확대 */
+  .about-value-card.is-expanded.content-visible h3 {
+    font-size: 1.25rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.5rem;
+  }
+
+  /* 확장 완료 후 숫자 배지는 숨김 유지 (레이아웃 방해 방지) */
+  .about-value-card.is-expanded.content-visible .card-index-badge {
+    opacity: 0;
+  }
+
+  /* 확장 완료 상태 카드 스타일 */
+  .about-value-card.is-expanded {
+    z-index: 20;
+    overflow: visible;
+    border-color: rgba(255, 255, 255, 0.72);
+    border-radius: 36px;
     background: transparent;
-    padding: 1.75rem;
+    box-shadow: 0 24px 65px rgba(31, 48, 76, 0.14);
     transition:
       left 900ms cubic-bezier(0.22, 1, 0.36, 1),
       top 900ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -220,53 +383,8 @@ const { about, meta } = portfolioData;
       opacity 650ms ease;
   }
 
-  .about-value-slot:nth-child(1) .about-value-card {
-    border-top-left-radius: 0.7rem;
-  }
-
-  .about-value-slot:nth-child(2) .about-value-card {
-    border-top-right-radius: 0.7rem;
-  }
-
-  .about-value-slot:nth-child(3) .about-value-card {
-    border-bottom-left-radius: 0.7rem;
-  }
-
-  .about-value-slot:nth-child(4) .about-value-card {
-    border-bottom-right-radius: 0.7rem;
-  }
-
-  .about-value-card::after {
-    position: absolute;
-    right: 1.75rem;
-    bottom: 1.15rem;
-    left: 1.75rem;
-    height: 2px;
-    background: linear-gradient(90deg, var(--color-brand-coral), var(--color-brand-gold));
-    content: '';
-    opacity: 0;
-    transform: scaleX(0);
-    transform-origin: left center;
-  }
-
-  .about-value-card.is-hovered {
-    z-index: 5;
-    border-color: rgba(232, 93, 63, 0.92);
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .about-value-card.is-hovered::after {
+  .about-value-card.is-expanded .card-glass-layer {
     opacity: 1;
-    animation: about-hover-progress 500ms linear forwards;
-  }
-
-  .about-value-card.is-expanded {
-    z-index: 20;
-    border-color: rgba(232, 93, 63, 0.95);
-    border-radius: 0.7rem;
-    background: transparent;
-    box-shadow: 0 22px 60px rgba(23, 36, 62, 0.14);
   }
 
   .about-value-card.is-expanded::after {
@@ -284,48 +402,25 @@ const { about, meta } = portfolioData;
   }
 
   @media (min-width: 640px) {
-    .about-value-slot:nth-child(1),
-    .about-value-slot:nth-child(2) {
-      border-bottom-width: 1px;
-    }
-
-    .about-value-slot:nth-child(1),
-    .about-value-slot:nth-child(3) {
-      border-right-width: 1px;
-    }
-
-    .about-value-slot:nth-child(1) .about-value-card.is-hovered:not(.is-expanded),
-    .about-value-slot:nth-child(3) .about-value-card.is-hovered:not(.is-expanded) {
-      width: calc(100% + 1px);
-    }
-
-    .about-value-slot:nth-child(2) .about-value-card.is-hovered:not(.is-expanded),
-    .about-value-slot:nth-child(4) .about-value-card.is-hovered:not(.is-expanded) {
-      left: -1px;
-      width: calc(100% + 1px);
-    }
-
-    .about-value-slot:nth-child(1) .about-value-card.is-hovered:not(.is-expanded),
-    .about-value-slot:nth-child(2) .about-value-card.is-hovered:not(.is-expanded) {
-      height: calc(100% + 1px);
-    }
-
-    .about-value-slot:nth-child(3) .about-value-card.is-hovered:not(.is-expanded),
-    .about-value-slot:nth-child(4) .about-value-card.is-hovered:not(.is-expanded) {
-      top: -1px;
-      height: calc(100% + 1px);
-    }
-
+    /*
+     * 확장 카드는 슬롯의 200%가 아니라 그리드의 100%를 정확히 덮어야 함.
+     * 슬롯은 그리드의 50% 너비이므로:
+     *   width: 200% = 슬롯 200% = 그리드 100%  ✓
+     *   height: 200% = 슬롯 200% = 그리드 100% ✓
+     * 오른쪽/하단 슬롯에서의 위치 보정도 동일 비율로 적용.
+     */
     .about-value-card.is-expanded {
       width: 200%;
       height: 200%;
     }
 
+    /* 오른쪽 열 슬롯(2, 4)은 왼쪽으로 슬롯 너비(=그리드 50%)만큼 이동 */
     .about-value-slot:nth-child(2) .about-value-card.is-expanded,
     .about-value-slot:nth-child(4) .about-value-card.is-expanded {
       left: -100%;
     }
 
+    /* 하단 행 슬롯(3, 4)은 위로 슬롯 높이만큼 이동 */
     .about-value-slot:nth-child(3) .about-value-card.is-expanded,
     .about-value-slot:nth-child(4) .about-value-card.is-expanded {
       top: -100%;
@@ -349,4 +444,5 @@ const { about, meta } = portfolioData;
       transition: none;
     }
   }
+
 </style>

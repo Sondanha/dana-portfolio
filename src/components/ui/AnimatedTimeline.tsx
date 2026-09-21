@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect, useState } from 'react';
-import { LazyMotion, domAnimation, m } from 'framer-motion';
+import { LazyMotion, domMax, m } from 'framer-motion';
 
 interface TimelineItemData {
   readonly id: string;
@@ -17,26 +17,26 @@ interface AnimatedTimelineProps {
 const TYPE_STYLES: Record<string, { dot: string; badge: string; label: string }> = {
   achievement: {
     dot: 'bg-[var(--color-accent)]',
-    badge: 'text-[var(--color-accent)] bg-[var(--color-accent-subtle)]',
+    badge: 'glass-chip text-[var(--color-accent)]',
     label: 'Achievement',
   },
   education: {
     dot: 'bg-[var(--color-success)]',
-    badge: 'text-[var(--color-success)] bg-[rgba(34,197,94,0.1)]',
+    badge: 'glass-chip text-[var(--color-success)]',
     label: 'Education',
   },
   activity: {
     dot: 'bg-[var(--color-warning)]',
-    badge: 'text-[var(--color-warning)] bg-[rgba(234,179,8,0.1)]',
+    badge: 'glass-chip text-[var(--color-warning)]',
     label: 'Activity',
   },
 } as const;
 
 const FILTERS = [
-  { value: 'all', label: 'All' },
-  { value: 'activity', label: 'Activity' },
-  { value: 'education', label: 'Education' },
-  { value: 'achievement', label: 'Achievement' },
+  { value: 'all', label: 'All', activeColor: 'text-[var(--color-text-primary)]' },
+  { value: 'activity', label: 'Activity', activeColor: 'text-[var(--color-warning)]' },
+  { value: 'education', label: 'Education', activeColor: 'text-[var(--color-success)]' },
+  { value: 'achievement', label: 'Achievement', activeColor: 'text-[var(--color-accent)]' },
 ] as const;
 
 type TimelineFilter = (typeof FILTERS)[number]['value'];
@@ -59,9 +59,14 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
     : items.filter((item) => item.type === activeFilter);
 
   return (
-    <LazyMotion features={domAnimation}>
+    <LazyMotion features={domMax}>
       <div>
-        <div className="mb-12 flex flex-wrap gap-2" role="group" aria-label="타임라인 유형 필터">
+        {/* iOS segmented control style track */}
+        <div 
+          className="mb-12 relative flex w-fit items-center flex-wrap sm:flex-nowrap rounded-full bg-[rgba(13,27,54,0.04)] p-1.5 shadow-inner"
+          role="group" 
+          aria-label="타임라인 유형 필터"
+        >
           {FILTERS.map((filter) => {
             const isActive = activeFilter === filter.value;
 
@@ -71,13 +76,29 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => setActiveFilter(filter.value)}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+                className={`relative z-10 flex-1 whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-200 ${
                   isActive
-                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_8px_20px_rgba(197,75,50,0.16)]'
-                    : 'border-[var(--color-border)] bg-transparent text-[var(--color-text-secondary)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]'
+                    ? filter.activeColor
+                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
               >
-                {filter.label}
+                {isActive && (
+                  <div className="absolute inset-0 z-[-1]">
+                    <m.div
+                      layoutId="timelineFilterPill"
+                      className="h-full w-full rounded-full border border-[rgba(255,255,255,0.4)] shadow-[inset_0_1px_2px_rgba(255,255,255,0.6),0_2px_8px_rgba(0,0,0,0.03)]"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.06)',
+                        backdropFilter: 'blur(10px) saturate(120%)',
+                        WebkitBackdropFilter: 'blur(10px) saturate(120%)'
+                      }}
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  </div>
+                )}
+                <span className="relative z-10 inline-block">
+                  {filter.label}
+                </span>
               </button>
             );
           })}
@@ -133,7 +154,7 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
                     {item.description && (
                       <p className="whitespace-pre-line text-sm text-[var(--color-text-secondary)]">{item.description}</p>
                     )}
-                    <span className={`mt-3 inline-block rounded-md px-2.5 py-0.5 text-xs font-semibold ${style.badge}`}>
+                    <span className={`mt-3 inline-block rounded-full px-4 py-1.5 text-xs font-semibold ${style.badge}`}>
                       {style.label}
                     </span>
                   </div>

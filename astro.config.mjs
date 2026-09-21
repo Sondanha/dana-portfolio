@@ -38,5 +38,8 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      noExternal: ['@liqui-design/glass'],
+    },
   },
 });

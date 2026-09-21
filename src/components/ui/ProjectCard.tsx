@@ -17,7 +17,7 @@ interface ProjectCardProps {
   readonly isFeatured?: boolean;
 }
 
-/** Project card with a restrained elevation interaction. */
+/** Project card with LiquiGlass surface and restrained elevation interaction. */
 export default function ProjectCard({
   title,
   description,
@@ -33,21 +33,52 @@ export default function ProjectCard({
   secondaryLabel = 'Repository',
   isFeatured = false,
 }: ProjectCardProps): ReactNode {
+  const isLogoCard = thumbnailFit === 'contain';
+
   const visual = (
-    <div className={`relative w-full overflow-hidden ${thumbnailFit === 'contain' ? 'bg-black' : 'bg-gradient-to-br from-[#fff3e4] via-[#fffaf3] to-[#f7ddd4]'} ${isFeatured ? 'aspect-[16/10] lg:h-full lg:aspect-auto' : 'aspect-video'}`}>
-      {thumbnail ? (
+    <div
+      className={`relative w-full overflow-hidden bg-transparent ${
+        isFeatured ? 'aspect-[16/10] lg:h-full lg:aspect-auto' : 'aspect-video'
+      }`}
+    >
+      {/* A-Voice Chat: 실제 로고 + 글로우 */}
+      {isLogoCard ? (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <img
+            src="/images/projects/a-voice-chat-logo.png"
+            alt="A-Voice Chat 로고"
+            loading="eager"
+            style={{
+              width: '78%',
+              maxWidth: 320,
+              height: 'auto',
+              opacity: 0.72,
+              filter:
+                'drop-shadow(0 2px 12px rgba(13, 27, 54, 0.2)) drop-shadow(0 0 4px rgba(255,255,255,0.5))',
+            }}
+          />
+        </div>
+      ) : thumbnail ? (
         <img
           src={thumbnail}
           alt={`${title} 프로젝트 미리보기`}
-          className={`absolute inset-0 h-full w-full transition-transform duration-700 ${
-            thumbnailFit === 'contain'
-              ? 'object-contain group-hover:scale-[1.02]'
-              : 'object-cover group-hover:scale-[1.025]'
-          } ${thumbnailPosition === 'top' ? 'object-top' : 'object-center'}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.025] ${
+            thumbnailPosition === 'top' ? 'object-top' : 'object-center'
+          }`}
           loading="lazy"
+          style={{ zIndex: 1, mixBlendMode: 'multiply', opacity: 0.82 }}
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 1 }}>
           <span className="text-4xl text-[var(--color-text-tertiary)]">
             {category === 'Product' ? '🚀' : '📚'}
           </span>
@@ -58,22 +89,21 @@ export default function ProjectCard({
 
   return (
     <LazyMotion features={domAnimation}>
-      <m.article
+      <m.a
+        href={detailUrl || undefined}
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         whileHover={{ y: -4 }}
-        className={`group relative h-full overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] shadow-[0_10px_35px_rgba(42,39,94,0.06)] transition-all duration-300 hover:border-[var(--color-border-hover)] hover:shadow-[0_20px_50px_rgba(42,39,94,0.12)] ${
+        className={`project-glass-card group relative block h-full overflow-hidden rounded-[1.5rem] transition-all duration-300 ${
           isFeatured ? 'lg:grid lg:min-h-[360px] lg:grid-cols-[0.9fr_1.1fr]' : 'flex flex-col'
         }`}
       >
-        {/* Visual area */}
-        {detailUrl ? (
-          <a href={detailUrl} className={`${isFeatured ? 'lg:order-2 lg:h-full lg:min-h-0' : ''} block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)]`} aria-label={`${title} 자세히 보기`}>
-            {visual}
-          </a>
-        ) : visual}
+        {/* Visual area — 링크 제거, m.a가 카드 전체를 감쌈 */}
+        <div className={`${isFeatured ? 'lg:order-2 lg:h-full lg:min-h-0' : ''}`}>
+          {visual}
+        </div>
 
         {/* Content */}
         <div className={`relative flex flex-1 flex-col ${isFeatured ? 'justify-center p-8 sm:p-10 lg:p-12' : 'p-6'}`}>
@@ -82,9 +112,13 @@ export default function ProjectCard({
               {category}
             </span>
           )}
-          <h3 className={`${isFeatured ? 'text-2xl sm:text-3xl' : 'text-lg'} mb-3 font-bold tracking-tight text-[var(--color-text-primary)]`}>{title}</h3>
+          <h3 className={`${isFeatured ? 'text-2xl sm:text-3xl' : 'text-lg'} mb-3 font-bold tracking-tight text-[var(--color-text-primary)]`}>
+            {title}
+          </h3>
           {description && (
-            <p className={`${isFeatured ? 'max-w-md text-base' : 'text-sm'} mb-5 leading-relaxed text-[var(--color-text-secondary)]`}>{description}</p>
+            <p className={`${isFeatured ? 'max-w-md text-base' : 'text-sm'} mb-5 leading-relaxed text-[var(--color-text-secondary)]`}>
+              {description}
+            </p>
           )}
 
           {/* Tags */}
@@ -101,22 +135,20 @@ export default function ProjectCard({
             </div>
           )}
 
-          {/* Links */}
-          <div className="mt-auto flex items-center gap-4 pt-1">
+          {/* Links — e.stopPropagation으로 카드 이동과 충돌 방지 */}
+          <div className="mt-auto flex items-center gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
             {detailUrl && (
-              <a
-                href={detailUrl}
-                className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]"
-              >
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-accent)]">
                 자세히 보기
                 <span aria-hidden="true">→</span>
-              </a>
+              </span>
             )}
             {liveUrl && (
               <a
                 href={liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)]"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,6 +162,7 @@ export default function ProjectCard({
                 href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -143,6 +176,7 @@ export default function ProjectCard({
                 href={secondaryUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -153,7 +187,7 @@ export default function ProjectCard({
             )}
           </div>
         </div>
-      </m.article>
+      </m.a>
     </LazyMotion>
   );
 }
