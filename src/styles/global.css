@@ -327,11 +327,17 @@ body {
   background: linear-gradient(128deg, rgba(255, 255, 255, 0.9), rgba(184, 223, 255, 0.42) 28%, transparent 48%, rgba(222, 170, 183, 0.32) 74%, rgba(255, 255, 255, 0.6)) border-box;
   content: '';
   mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
   -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
   opacity: 0.68;
   pointer-events: none;
+}
+
+/* 텍스트가 블러(::after 또는 백그라운드)에 가려지지 않도록 콘텐츠 레이어 상단으로 끌어올림 */
+.project-glass-card > * {
+  position: relative;
+  z-index: 5;
 }
 
 .page-shell {
