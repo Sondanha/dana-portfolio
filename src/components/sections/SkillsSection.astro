@@ -124,6 +124,32 @@ const marqueeTools = capabilities.flatMap((capability) => capability.tools);
 </script>
 
 <style>
+  /* liquid-card의 도트 패턴(::before)과 그라디언트 테두리(::after) 제거 */
+  .skill-capability-card::before,
+  .skill-capability-card::after {
+    display: none;
+  }
+
+  /* 배경 투명 + 얇은 흰 외곽선 */
+  .skill-capability-card {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .skill-capability-card:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: none;
+  }
+
+  /* 텍스트가 glass 레이어 위에 오도록 */
+  .skill-capability-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
   [data-skill-card].is-filtered {
     grid-column: 1 / -1;
   }
@@ -133,36 +159,35 @@ const marqueeTools = capabilities.flatMap((capability) => capability.tools);
     z-index: 1;
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    min-height: 2.65rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.7rem;
-    background: rgba(255, 255, 255, 0.52);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(12px);
-    padding: 0.45rem 0.7rem;
-    color: var(--color-text-secondary);
-    font-size: 0.75rem;
-    font-weight: 600;
-    transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    padding: 0;
+    transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
   }
 
   .skill-logo-item img {
-    width: 1.55rem;
-    height: 1.55rem;
+    width: 1.5rem;
+    height: 1.5rem;
     object-fit: contain;
   }
 
   .skill-logo-item:hover {
-    border-color: rgba(184, 95, 115, 0.45);
-    color: var(--color-text-primary);
+    border-color: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.18);
     transform: translateY(-2px);
   }
 
   .skill-logo-item.is-logo-only {
-    justify-content: center;
-    width: 3.2rem;
-    padding: 0.45rem;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
   }
 
   .skills-logo-marquee {

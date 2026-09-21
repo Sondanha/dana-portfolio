@@ -2,10 +2,14 @@ import { type ReactNode } from 'react';
 import { LiquiGlass } from '@liqui-design/glass';
 import '@liqui-design/glass/tokens.css';
 
-export default function AboutGlassSurface(): ReactNode {
+interface AboutGlassSurfaceProps {
+  readonly className?: string;
+}
+
+export default function AboutGlassSurface({ className = 'about-refraction-surface' }: AboutGlassSurfaceProps): ReactNode {
   return (
     <LiquiGlass
-      className="about-refraction-surface"
+      className={className}
       radius={36}
       refraction={72}
       bezel={18}
