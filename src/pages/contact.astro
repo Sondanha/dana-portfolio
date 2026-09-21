@@ -4,6 +4,7 @@ import Header from '../components/layout/Header.astro';
 import portfolioData from '../data/portfolio.json';
 
 const { contact, meta } = portfolioData;
+const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(meta.email)}`;
 ---
 
 <BaseLayout title="Contact | Son Danha" description="손단하에게 프로젝트와 협업에 관한 이야기를 남겨주세요.">
@@ -30,7 +31,7 @@ const { contact, meta } = portfolioData;
         <button type="button" data-copy-email data-email={meta.email} class="mt-12 w-fit max-w-full break-all text-center text-2xl font-bold tracking-tight text-[var(--color-text-primary)] transition-colors hover:text-[var(--color-accent)] sm:text-3xl" aria-label={`${meta.email} 복사`}>
           {meta.email}
         </button>
-        <p class="mt-4 text-sm text-[var(--color-text-secondary)]">메일 주소를 복사하거나 기본 메일 앱에서 바로 연락할 수 있습니다.</p>
+        <p class="mt-4 text-sm text-[var(--color-text-secondary)]">메일 주소를 복사하거나 Gmail에서 바로 연락할 수 있습니다.</p>
 
         <div class="mt-10 grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
           <button type="button" data-copy-email data-email={meta.email} class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-3 text-sm font-normal text-white transition-colors hover:bg-white hover:text-[var(--color-accent)]">
@@ -40,11 +41,11 @@ const { contact, meta } = portfolioData;
             </svg>
             <span data-copy-email-label>{contact.emailLabel}</span>
           </button>
-          <a href={`mailto:${meta.email}`} class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--color-border)] px-5 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
+          <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--color-border)] px-5 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6.5h16v11H4zM4 7l8 6 8-6" />
             </svg>
-            메일 앱 열기
+            Gmail에서 메일 쓰기
           </a>
         </div>
         <p id="copy-email-status" class="mt-4 min-h-5 text-sm text-[var(--color-text-secondary)]" aria-live="polite"></p>
