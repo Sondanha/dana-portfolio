@@ -62,14 +62,26 @@ const megaNavGroups = [
     <LiquidNavGlass client:load />
   </div>
 
-  <nav class="header-nav-shell mx-auto mt-0 flex max-w-7xl items-center border border-transparent px-4 py-3 transition-all duration-300 sm:px-6">
+  <nav class="header-nav-shell mx-auto mt-0 flex min-h-[4.5rem] max-w-7xl items-center border border-transparent px-4 py-3 transition-all duration-300 sm:px-6">
     <a
       href="/"
-      class="inline-flex shrink-0 items-center transition-transform hover:scale-105"
-      aria-label="홈으로 이동"
+      id="header-logo-link"
+      class="header-logo-link inline-flex shrink-0 items-center transition-transform hover:scale-105"
+      aria-label="홈으로 이동 (모바일 메뉴 열기)"
     >
       <img src="/dh-logo.svg" alt="" class="h-12 w-12 object-contain" width="48" height="48" />
     </a>
+
+    <!-- Mobile Close X Shape (Only visible when opened) -->
+    <svg 
+      id="mobile-close-shape" 
+      class="mobile-close-shape md:hidden" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+    </svg>
 
     <!-- Desktop Nav -->
     {hasNavigation && (
@@ -93,20 +105,7 @@ const megaNavGroups = [
       <LiquidContactButton compact icon="none" client:load />
     </div>
 
-    <!-- Mobile Menu Button -->
-    {hasNavigation && (
-      <button
-        id="mobile-menu-toggle"
-        class="ml-auto flex h-10 w-10 items-center justify-center rounded-full text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg-card)] md:hidden"
-        aria-label="메뉴 열기"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-      >
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    )}
+    <!-- Mobile Menu Button removed, logo is the toggle -->
   </nav>
 
   {enableMegaMenu && (
@@ -133,7 +132,7 @@ const megaNavGroups = [
   {hasNavigation && (
     <div
       id="mobile-menu"
-      class="mobile-menu-extension relative z-[2] mx-auto hidden max-w-7xl md:hidden"
+      class="mobile-menu-extension mx-auto max-w-7xl md:hidden"
     >
       <ul class="flex flex-col px-6 py-4">
         {enableMegaMenu ? megaNavGroups.map((group, index) => (
@@ -171,7 +170,8 @@ const megaNavGroups = [
 
 <script>
   const header = document.getElementById('site-header');
-  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const logoLink = document.getElementById('header-logo-link');
+  const mobileCloseShape = document.getElementById('mobile-close-shape');
   const mobileMenu = document.getElementById('mobile-menu');
 
   // Scroll effect: turn the navigation into a floating white card.
@@ -182,21 +182,16 @@ const megaNavGroups = [
 
   // Mobile menu toggle
   function toggleMobileMenu(): void {
-    const isHidden = mobileMenu?.classList.contains('hidden');
-    if (isHidden) {
-      mobileMenu?.classList.remove('hidden');
-    } else {
-      mobileMenu?.classList.add('hidden');
-    }
-    
-    mobileToggle?.setAttribute('aria-expanded', String(isHidden));
-    header?.classList.toggle('is-mobile-open', isHidden);
+    const isNowOpen = !header?.classList.contains('is-mobile-open');
+    header?.classList.toggle('is-mobile-open', isNowOpen);
+    logoLink?.setAttribute('aria-expanded', String(isNowOpen));
 
     const refractionStage = header?.querySelector('.header-refraction-stage') as HTMLElement;
-    if (isHidden && refractionStage && header && mobileMenu) {
+    if (isNowOpen && refractionStage && header && mobileMenu) {
       const navShell = header.querySelector('.header-nav-shell') as HTMLElement;
-      // Calculate exact height: nav height + mobile menu height + extra padding
-      const totalHeight = navShell.offsetHeight + mobileMenu.offsetHeight + 16;
+      // We must measure the inner UL since the container might be animating its max-height
+      const menuContent = mobileMenu.querySelector('ul') as HTMLElement;
+      const totalHeight = navShell.offsetHeight + (menuContent ? menuContent.offsetHeight : 0) + 16;
       refractionStage.style.height = `${totalHeight}px`;
     } else if (refractionStage) {
       refractionStage.style.height = '';
@@ -205,13 +200,24 @@ const megaNavGroups = [
 
   window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
-  mobileToggle?.addEventListener('click', toggleMobileMenu);
+  
+  logoLink?.addEventListener('click', (e) => {
+    if (window.innerWidth < 768) {
+      e.preventDefault();
+      toggleMobileMenu();
+    }
+  });
+
+  mobileCloseShape?.addEventListener('click', () => {
+    if (window.innerWidth < 768) {
+      toggleMobileMenu();
+    }
+  });
 
   // Close mobile menu on link click
   document.querySelectorAll('.mobile-nav-link').forEach((link) => {
     link.addEventListener('click', () => {
-      mobileMenu?.classList.add('hidden');
-      mobileToggle?.setAttribute('aria-expanded', 'false');
+      logoLink?.setAttribute('aria-expanded', 'false');
       header?.classList.remove('is-mobile-open');
       const refractionStage = header?.querySelector('.header-refraction-stage') as HTMLElement;
       if (refractionStage) {
@@ -222,6 +228,76 @@ const megaNavGroups = [
 </script>
 
 <style>
+  @keyframes float-logo {
+    0%, 100% { transform: translateY(-50%); }
+    50% { transform: translateY(calc(-50% - 4px)); }
+  }
+
+  @media (max-width: 767px) {
+    .header-logo-link {
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      /* Remove default transition from inline class to control it fully */
+      transition: right 300ms var(--ease-out-expo), transform 300ms var(--ease-out-expo) !important;
+      animation: float-logo 4s ease-in-out infinite;
+    }
+
+    #site-header.is-mobile-open .header-logo-link {
+      /* Width of container is 100%, we want it on the left padding (1rem) */
+      right: calc(100% - 1rem - 3rem); /* 100% - right_padding - logo_width */
+      /* Stop floating when menu is open for stability */
+      animation: none;
+      transform: translateY(-50%);
+    }
+
+    .mobile-close-shape {
+      position: absolute;
+      right: 1.75rem; /* Perfectly centers X horizontally where the logo used to be */
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg) scale(0.5);
+      width: 1.5rem;
+      height: 1.5rem;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      /* Fast fade out when closing */
+      transition: all 200ms ease;
+    }
+
+    #site-header.is-mobile-open .mobile-close-shape {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(-50%) rotate(0deg) scale(1);
+      /* Delay fade in so it appears after the bubble expands */
+      transition: all 400ms var(--ease-out-expo) 300ms;
+    }
+  }
+
+  .mobile-menu-extension {
+    position: relative;
+    z-index: 2;
+    margin-top: 0;
+    max-height: 0;
+    overflow: visible;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    /* Close: content disappears and shrinks height instantly, while glass width waits */
+    transition: max-height 300ms var(--ease-out-expo), opacity 150ms ease, visibility 150ms ease;
+  }
+
+  #site-header.is-mobile-open .mobile-menu-extension {
+    max-height: 40rem; /* Enough to fit the menu */
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    /* Open: content waits 300ms for width to expand before dropping down and fading in */
+    transition: max-height 300ms var(--ease-out-expo) 300ms, opacity 250ms ease 400ms, visibility 0ms 300ms;
+  }
+
   .desktop-nav-item {
     position: relative;
   }

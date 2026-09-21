@@ -94,6 +94,12 @@ main > section > * {
   background: rgba(255, 255, 255, 0.12);
 }
 
+/* Typography Overrides */
+h1, h2, h3, h4, h5, h6 {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
 body {
   position: relative;
   overflow-x: clip;
@@ -473,14 +479,37 @@ body {
 
 .header-refraction-stage {
   position: absolute;
-  top: 0.6rem;
-  left: 50%;
-  width: calc(100% - 1.5rem);
-  max-width: 80rem;
+  top: 0.6rem; /* Align with nav shell top */
+  right: 0.25rem; /* Center the 4.5rem bubble on the 3rem logo */
+  width: 4.5rem;
   height: 4.5rem;
-  transform: translateX(-50%);
+  border-radius: 999px;
+  opacity: 0;
+  transform: scale(0.6);
   pointer-events: none;
-  transition: height 360ms var(--ease-out-expo);
+  /* Close transition: shrink height first, then width/position, fade out at end */
+  transition: height 300ms var(--ease-out-expo), 
+              width 300ms var(--ease-out-expo) 300ms, 
+              border-radius 300ms ease 300ms, 
+              top 300ms var(--ease-out-expo) 300ms,
+              right 300ms var(--ease-out-expo) 300ms,
+              transform 300ms var(--ease-out-expo) 300ms,
+              opacity 200ms ease 400ms;
+}
+
+@media (min-width: 768px) {
+  .header-refraction-stage {
+    top: 0.6rem;
+    left: 50%;
+    right: auto;
+    width: calc(100% - 1.5rem);
+    max-width: 80rem;
+    height: 4.5rem;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    border-radius: 36px;
+    transition: height 360ms var(--ease-out-expo);
+  }
 }
 
 #site-header:has(.has-mega-menu:hover) .header-refraction-stage,
@@ -491,13 +520,30 @@ body {
 }
 
 #site-header.is-mobile-open .header-refraction-stage {
-  height: 30rem;
+  top: 0.6rem;
+  right: 0.75rem;
+  width: calc(100% - 1.5rem);
+  border-radius: 36px;
+  opacity: 1;
+  transform: scale(1);
+  /* Open transition: pop in instantly, expand width first, then height */
+  transition: opacity 100ms ease,
+              transform 300ms var(--ease-out-expo),
+              width 300ms var(--ease-out-expo), 
+              border-radius 300ms ease, 
+              top 300ms var(--ease-out-expo),
+              right 300ms var(--ease-out-expo),
+              height 300ms var(--ease-out-expo) 300ms;
 }
 
-#site-header.is-mobile-open .header-refraction-surface {
-  --lq-tint: rgba(245, 249, 255, 0.75);
-  --lq-tint-deep: rgba(13, 27, 54, 0.12);
+@media (min-width: 768px) {
+  #site-header.is-mobile-open .header-refraction-stage {
+    /* Height matches JS on mobile, but reset transition for desktop */
+    transition: height 360ms var(--ease-out-expo);
+  }
 }
+
+
 
 .header-refraction-stage astro-island {
   display: block;
@@ -515,6 +561,9 @@ body {
   --lq-highlight: rgba(255, 255, 255, 0.9);
   --lq-shadow: 0 18px 52px rgba(13, 27, 54, 0.18), 0 3px 10px rgba(184, 95, 115, 0.1);
 }
+
+/* Desktop and open state overrides are no longer needed for lighting since it's the same */
+
 
 .header-nav-shell {
   position: relative;
