@@ -62,9 +62,9 @@ const marqueeTools = capabilities.flatMap((capability) => capability.tools);
       아이디어를 서비스로 완성하는 역량
     </h2>
 
-    <div class="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-12">
+    <div class="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-12" data-skill-grid>
       {capabilities.map((capability, index) => (
-        <div class={capability.span} id={`skill-${capability.id}`}>
+        <div class={capability.span} id={`skill-${capability.id}`} data-skill-card={capability.id}>
           <AnimatedBentoCard client:visible delay={index * 0.08}>
             <article class="skill-capability-card group flex h-full min-h-[19rem] flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-transparent p-6 shadow-[0_12px_38px_rgba(23,36,62,0.055)] transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(197,75,50,0.42)] hover:shadow-[0_20px_48px_rgba(23,36,62,0.1)] sm:p-8">
               <h3 class="text-2xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-3xl">
@@ -109,27 +109,23 @@ const marqueeTools = capabilities.flatMap((capability) => capability.tools);
   </div>
 </section>
 
+<script>
+  const requestedSkill = new URLSearchParams(window.location.search).get('skill');
+  const skillCards = Array.from(document.querySelectorAll<HTMLElement>('[data-skill-card]'));
+  const hasRequestedSkill = skillCards.some((card) => card.dataset.skillCard === requestedSkill);
+
+  if (hasRequestedSkill) {
+    skillCards.forEach((card) => {
+      const isSelected = card.dataset.skillCard === requestedSkill;
+      card.hidden = !isSelected;
+      card.classList.toggle('is-filtered', isSelected);
+    });
+  }
+</script>
+
 <style>
-  .skill-capability-card {
-    position: relative;
-  }
-
-  .skill-capability-card::after {
-    position: absolute;
-    right: -4.5rem;
-    bottom: -5rem;
-    width: 13rem;
-    height: 13rem;
-    border: 1px solid rgba(197, 75, 50, 0.09);
-    border-radius: 50%;
-    content: '';
-    pointer-events: none;
-    transition: transform 500ms var(--ease-out-expo), border-color 300ms ease;
-  }
-
-  .skill-capability-card:hover::after {
-    border-color: rgba(197, 75, 50, 0.18);
-    transform: translate(-0.75rem, -0.5rem) scale(1.05);
+  [data-skill-card].is-filtered {
+    grid-column: 1 / -1;
   }
 
   .skill-logo-item {

@@ -62,6 +62,18 @@ main > section {
   scroll-snap-stop: always;
 }
 
+/* Keep touch scrolling free on mobile and tablet layouts. */
+@media (max-width: 1023px), (hover: none) and (pointer: coarse) {
+  html {
+    scroll-snap-type: none;
+  }
+
+  main > section {
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+}
+
 main > section:not(#hero):not(#contact)::before {
   background-image: url('/favicon.png');
   background-position: center;
@@ -152,6 +164,10 @@ main > section:not(#hero):not(#contact)::after {
   right: 0 !important;
   top: auto !important;
   width: min(52vw, 42rem) !important;
+}
+
+#timeline::after {
+  display: none;
 }
 
 main > section:nth-of-type(odd):not(#hero):not(#contact)::after {

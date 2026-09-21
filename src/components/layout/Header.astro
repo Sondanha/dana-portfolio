@@ -33,11 +33,20 @@ const megaNavGroups = [
   },
   {
     label: 'Skills',
-    items: [],
+    items: [
+      { label: 'AI Engineering', href: '/?skill=ai-model#skills' },
+      { label: 'Full-stack', href: '/?skill=full-stack#skills' },
+      { label: 'Team Execution', href: '/?skill=team#skills' },
+      { label: 'Data & Cloud', href: '/?skill=data-cloud#skills' },
+    ],
   },
   {
     label: 'Timeline',
-    items: [],
+    items: [
+      { label: 'Activity', href: '/?timeline=activity#timeline' },
+      { label: 'Education', href: '/?timeline=education#timeline' },
+      { label: 'Achievement', href: '/?timeline=achievement#timeline' },
+    ],
   },
 ] as const;
 ---

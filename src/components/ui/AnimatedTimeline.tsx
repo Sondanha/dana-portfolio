@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 
 interface TimelineItemData {
@@ -44,6 +44,16 @@ type TimelineFilter = (typeof FILTERS)[number]['value'];
 /** Animated timeline with staggered reveal on scroll. */
 export default function AnimatedTimeline({ items }: AnimatedTimelineProps): ReactNode {
   const [activeFilter, setActiveFilter] = useState<TimelineFilter>('all');
+
+  useEffect(() => {
+    const requestedFilter = new URLSearchParams(window.location.search).get('timeline');
+    const matchingFilter = FILTERS.find((filter) => filter.value === requestedFilter);
+
+    if (matchingFilter) {
+      setActiveFilter(matchingFilter.value);
+    }
+  }, []);
+
   const filteredItems = activeFilter === 'all'
     ? items
     : items.filter((item) => item.type === activeFilter);

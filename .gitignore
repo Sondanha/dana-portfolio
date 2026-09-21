@@ -27,3 +27,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local planning and AI instructions
+AGENTS.md
+CLAUDE.md
+codebase.txt
+task.md
