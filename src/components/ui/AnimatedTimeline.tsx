@@ -106,7 +106,7 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
 
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-[var(--color-border)] via-[var(--color-border)] to-transparent sm:left-1/2 sm:-translate-x-px" />
+          <div className="absolute left-[7.5px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-transparent via-[var(--color-accent)] to-transparent opacity-60 sm:left-1/2 sm:-translate-x-[1px]" />
 
           <div className="space-y-8 sm:space-y-12">
           {filteredItems.map((item, index) => {
@@ -133,7 +133,7 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
                     isLeft ? 'sm:justify-end sm:pr-12' : 'sm:order-2 sm:pl-12'
                   }`}
                 >
-                  <div className="max-w-md">
+                  <div className={`max-w-md ${isLeft ? 'text-right' : 'text-left'}`}>
                     <p className="mb-1 text-sm font-medium text-[var(--color-text-tertiary)] font-mono">
                       {item.period}
                     </p>
@@ -161,13 +161,13 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
                 </div>
 
                 {/* Dot */}
-                <div className="relative z-10 flex h-4 w-4 flex-shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:-translate-x-1/2">
+                <div className="relative z-10 flex h-4 w-4 flex-shrink-0 items-center justify-center sm:absolute sm:left-1/2 sm:-translate-x-1/2 mt-1 sm:mt-0">
                   <m.div
                     initial={{ scale: 0 }}
                     whileInView={{ scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: index * 0.08 + 0.2 }}
-                    className={`h-3.5 w-3.5 rounded-full border-2 border-[var(--color-bg-primary)] ${style.dot}`}
+                    className={`h-3.5 w-3.5 rounded-full border-2 border-[var(--color-bg-primary)] shadow-sm ${style.dot}`}
                   />
                 </div>
 

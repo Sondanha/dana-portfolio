@@ -22,6 +22,11 @@ const defaultNavItems = [
 const { navItems = defaultNavItems, enableMegaMenu = false } = Astro.props;
 const hasNavigation = navItems.length > 0;
 
+const pathname = Astro.url.pathname;
+const isProjectPage = pathname.startsWith('/product') || pathname.startsWith('/study');
+const contactLabel = isProjectPage ? 'Home' : 'Contact Me';
+const contactHref = isProjectPage ? '/' : '/contact';
+
 const megaNavGroups = [
   {
     label: 'About',
@@ -37,10 +42,10 @@ const megaNavGroups = [
   {
     label: 'Skills',
     items: [
-      { label: 'AI Engineering', href: '/?skill=ai-model#skills' },
-      { label: 'Full-stack', href: '/?skill=full-stack#skills' },
-      { label: 'Team Execution', href: '/?skill=team#skills' },
-      { label: 'Data & Cloud', href: '/?skill=data-cloud#skills' },
+      { label: 'AI Engineering', href: '/#skills' },
+      { label: 'Full-stack', href: '/#skills' },
+      { label: 'Team Execution', href: '/#skills' },
+      { label: 'Data & Cloud', href: '/#skills' },
     ],
   },
   {
@@ -102,7 +107,7 @@ const megaNavGroups = [
     )}
 
     <div class="ml-auto hidden md:block">
-      <LiquidContactButton compact icon="none" client:load />
+      <LiquidContactButton compact icon="none" client:load label={contactLabel} href={contactHref} />
     </div>
 
     <!-- Mobile Menu Button removed, logo is the toggle -->
@@ -160,7 +165,7 @@ const megaNavGroups = [
         ))}
         <li>
           <div class="mt-3">
-            <LiquidContactButton fullWidth icon="none" client:load />
+            <LiquidContactButton fullWidth icon="none" client:load label={contactLabel} href={contactHref} />
           </div>
         </li>
       </ul>

@@ -4,7 +4,7 @@ import '@liqui-design/glass/tokens.css';
 import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion';
 
 type LiquidActionVariant = 'accent' | 'clear';
-type LiquidActionIcon = 'plus' | 'arrow' | 'external' | 'copy' | 'none';
+type LiquidActionIcon = 'plus' | 'arrow' | 'external' | 'copy' | 'mail' | 'none';
 
 interface LiquidActionLinkProps {
   readonly href: string;
@@ -69,6 +69,11 @@ export function LiquidActionLink({
             <svg aria-hidden="true" className="liquid-action-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <rect x="8" y="8" width="11" height="11" rx="2" strokeWidth="1.8" />
               <path strokeLinecap="round" strokeWidth="1.8" d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+            </svg>
+          )}
+          {icon === 'mail' && (
+            <svg aria-hidden="true" className="liquid-action-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           )}
         </LiquiGlass>
@@ -139,6 +144,11 @@ export function LiquidActionButton({
               <path strokeLinecap="round" strokeWidth="1.8" d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
             </svg>
           )}
+          {icon === 'mail' && (
+            <svg aria-hidden="true" className="liquid-action-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          )}
         </LiquiGlass>
       </m.button>
     </LazyMotion>
@@ -150,13 +160,15 @@ interface LiquidContactButtonProps {
   readonly fullWidth?: boolean;
   readonly icon?: LiquidActionIcon;
   readonly className?: string;
+  readonly label?: string;
+  readonly href?: string;
 }
 
-export function LiquidContactButton({ compact = false, fullWidth = false, icon = 'plus', className = '' }: LiquidContactButtonProps): ReactNode {
+export function LiquidContactButton({ compact = false, fullWidth = false, icon = 'plus', className = '', label = "Contact Me", href = "/contact" }: LiquidContactButtonProps): ReactNode {
   return (
     <LiquidActionLink
-      href="/contact"
-      label="Contact Me"
+      href={href}
+      label={label}
       variant="accent"
       icon={icon}
       compact={compact}
