@@ -1,5 +1,6 @@
 ---
 import AnimatedBentoCard from '../ui/AnimatedBentoCard';
+import AboutGlassSurface from '../ui/AboutGlassSurface';
 
 const capabilities = [
   {
@@ -66,8 +67,11 @@ const marqueeTools = capabilities.flatMap((capability) => capability.tools);
       {capabilities.map((capability, index) => (
         <div class={capability.span} id={`skill-${capability.id}`} data-skill-card={capability.id}>
           <AnimatedBentoCard client:visible delay={index * 0.08}>
-            <article class="liquid-card skill-capability-card group flex h-full min-h-[19rem] flex-col overflow-hidden rounded-[1.5rem] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-border-hover)] hover:shadow-[inset_0_1px_0_white,0_28px_68px_rgba(42,55,82,0.15)] sm:p-8">
-              <h3 class="text-2xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-3xl">
+            <article class="liquid-card skill-capability-card relative group flex h-full min-h-[19rem] flex-col overflow-hidden rounded-[1.5rem] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-border-hover)] hover:shadow-[inset_0_1px_0_white,0_28px_68px_rgba(42,55,82,0.15)] sm:p-8">
+              <div class="skill-glass-layer sm:hidden" aria-hidden="true">
+                <AboutGlassSurface client:load className="card-glass-surface" radius={24} />
+              </div>
+              <h3 class="relative z-10 text-2xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-3xl">
                 {capability.title}
               </h3>
               <p class="mt-4 max-w-xl text-sm leading-7 text-[var(--color-text-secondary)] sm:text-base">
@@ -130,7 +134,20 @@ const marqueeTools = capabilities.flatMap((capability) => capability.tools);
     display: none;
   }
 
-  /* 배경 투명 + 얇은 흰 외곽선 */
+  .skill-glass-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .skill-glass-layer :global(astro-island) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 배경 투명 + 얇은 흰 외곽선 (기본/데스크탑) */
   .skill-capability-card {
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.32);
@@ -145,7 +162,7 @@ const marqueeTools = capabilities.flatMap((capability) => capability.tools);
   }
 
   /* 텍스트가 glass 레이어 위에 오도록 */
-  .skill-capability-card > * {
+  .skill-capability-card > *:not(.skill-glass-layer) {
     position: relative;
     z-index: 1;
   }

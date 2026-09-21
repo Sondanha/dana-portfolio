@@ -133,11 +133,11 @@ const megaNavGroups = [
   {hasNavigation && (
     <div
       id="mobile-menu"
-      class="mx-auto mt-2 hidden max-w-7xl overflow-hidden rounded-[36px] border border-white/75 bg-white/70 shadow-[inset_0_1px_0_white,0_18px_48px_rgba(47,65,91,0.14)] backdrop-blur-2xl md:hidden"
+      class="mobile-menu-extension relative z-[2] mx-auto hidden max-w-7xl md:hidden"
     >
       <ul class="flex flex-col px-6 py-4">
-        {enableMegaMenu ? megaNavGroups.map((group) => (
-          <li class="border-b border-[var(--color-border)] py-3 last:border-0">
+        {enableMegaMenu ? megaNavGroups.map((group, index) => (
+          <li class:list={['py-3', index !== megaNavGroups.length - 1 && 'border-b border-[var(--color-border)]']}>
             <a
               href={navItems.find((item) => item.label === group.label)?.href || '/'}
               class="mobile-nav-link block text-sm font-medium text-[var(--color-text-primary)]"
@@ -182,8 +182,25 @@ const megaNavGroups = [
 
   // Mobile menu toggle
   function toggleMobileMenu(): void {
-    mobileMenu?.classList.toggle('hidden');
-    mobileToggle?.setAttribute('aria-expanded', String(!mobileMenu?.classList.contains('hidden')));
+    const isHidden = mobileMenu?.classList.contains('hidden');
+    if (isHidden) {
+      mobileMenu?.classList.remove('hidden');
+    } else {
+      mobileMenu?.classList.add('hidden');
+    }
+    
+    mobileToggle?.setAttribute('aria-expanded', String(isHidden));
+    header?.classList.toggle('is-mobile-open', isHidden);
+
+    const refractionStage = header?.querySelector('.header-refraction-stage') as HTMLElement;
+    if (isHidden && refractionStage && header && mobileMenu) {
+      const navShell = header.querySelector('.header-nav-shell') as HTMLElement;
+      // Calculate exact height: nav height + mobile menu height + extra padding
+      const totalHeight = navShell.offsetHeight + mobileMenu.offsetHeight + 16;
+      refractionStage.style.height = `${totalHeight}px`;
+    } else if (refractionStage) {
+      refractionStage.style.height = '';
+    }
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true });
@@ -195,6 +212,11 @@ const megaNavGroups = [
     link.addEventListener('click', () => {
       mobileMenu?.classList.add('hidden');
       mobileToggle?.setAttribute('aria-expanded', 'false');
+      header?.classList.remove('is-mobile-open');
+      const refractionStage = header?.querySelector('.header-refraction-stage') as HTMLElement;
+      if (refractionStage) {
+        refractionStage.style.height = '';
+      }
     });
   });
 </script>
@@ -256,7 +278,8 @@ const megaNavGroups = [
   #site-header:has(.has-mega-menu:hover) .header-nav-shell,
   #site-header:has(.has-mega-menu:focus-within) .header-nav-shell,
   #site-header:has(.project-menu-extension:hover) .header-nav-shell,
-  #site-header:has(.project-menu-extension:focus-within) .header-nav-shell {
+  #site-header:has(.project-menu-extension:focus-within) .header-nav-shell,
+  #site-header.is-mobile-open .header-nav-shell {
     border-radius: 36px;
   }
 </style>

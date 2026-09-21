@@ -63,7 +63,7 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
       <div>
         {/* iOS segmented control style track */}
         <div 
-          className="mb-12 relative flex w-fit items-center flex-wrap sm:flex-nowrap rounded-full bg-[rgba(13,27,54,0.04)] p-1.5 shadow-inner"
+          className="mb-12 relative flex w-fit items-center flex-nowrap rounded-full bg-[rgba(13,27,54,0.04)] p-1.5 shadow-inner"
           role="group" 
           aria-label="타임라인 유형 필터"
         >
@@ -76,7 +76,7 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => setActiveFilter(filter.value)}
-                className={`relative z-10 flex-1 whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-200 ${
+                className={`relative z-10 flex-1 whitespace-nowrap rounded-full px-3 py-1.5 text-xs sm:px-5 sm:py-2.5 sm:text-sm font-semibold transition-colors duration-200 ${
                   isActive
                     ? filter.activeColor
                     : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'

@@ -4,13 +4,14 @@ import '@liqui-design/glass/tokens.css';
 
 interface AboutGlassSurfaceProps {
   readonly className?: string;
+  readonly radius?: number;
 }
 
-export default function AboutGlassSurface({ className = 'about-refraction-surface' }: AboutGlassSurfaceProps): ReactNode {
+export default function AboutGlassSurface({ className = 'about-refraction-surface', radius = 36 }: AboutGlassSurfaceProps): ReactNode {
   return (
     <LiquiGlass
       className={className}
-      radius={36}
+      radius={radius}
       refraction={72}
       bezel={18}
       frost={0.08}

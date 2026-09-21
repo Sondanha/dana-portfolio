@@ -39,14 +39,14 @@ const { about, meta } = portfolioData;
         </div>
         <ol class="about-values-grid relative z-10 grid h-full overflow-clip rounded-[36px] sm:grid-cols-2" data-about-grid>
           {about.values.map((value, index) => (
-            <li class="about-value-slot relative min-h-36 sm:min-h-64">
+            <li class="about-value-slot relative sm:min-h-64">
               <article class="about-value-card" tabindex="0" data-about-card>
                 <div class="card-glass-layer" aria-hidden="true">
                   <AboutGlassSurface client:load className="card-glass-surface" />
                 </div>
                 <span class="card-index-badge" aria-hidden="true">0{index + 1}</span>
                 <h3 class="card-content text-sm font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">{value.title}</h3>
-                <p class="card-content about-value-description mt-6 text-base font-semibold leading-relaxed text-[var(--color-text-primary)]">{value.description}</p>
+                <p class="card-content about-value-description mt-6 text-base font-normal sm:font-semibold leading-relaxed text-[var(--color-text-primary)]">{value.description}</p>
               </article>
             </li>
           ))}
@@ -161,7 +161,7 @@ const { about, meta } = portfolioData;
 
 <style>
   .about-values-grid {
-    grid-auto-rows: 1fr;
+    grid-auto-rows: auto;
     background: transparent;
   }
 
@@ -255,19 +255,14 @@ const { about, meta } = portfolioData;
   }
 
   .about-value-card {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     z-index: 1;
     width: 100%;
-    height: 100%;
+    height: auto;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.32);
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.2),
-      inset 1px 0 0 rgba(255, 255, 255, 0.08);
-    padding: 2rem;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 1.5rem;
     transition:
       left 900ms cubic-bezier(0.22, 1, 0.36, 1),
       top 900ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -402,13 +397,16 @@ const { about, meta } = portfolioData;
   }
 
   @media (min-width: 640px) {
-    /*
-     * 확장 카드는 슬롯의 200%가 아니라 그리드의 100%를 정확히 덮어야 함.
-     * 슬롯은 그리드의 50% 너비이므로:
-     *   width: 200% = 슬롯 200% = 그리드 100%  ✓
-     *   height: 200% = 슬롯 200% = 그리드 100% ✓
-     * 오른쪽/하단 슬롯에서의 위치 보정도 동일 비율로 적용.
-     */
+    .about-values-grid {
+      grid-auto-rows: 1fr;
+    }
+    
+    .about-value-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+    }
     .about-value-card.is-expanded {
       width: 200%;
       height: 200%;
@@ -426,6 +424,10 @@ const { about, meta } = portfolioData;
       top: -100%;
     }
 
+    .about-value-card {
+      padding: 2rem;
+    }
+
     .about-value-card.is-expanded .about-value-description {
       font-size: 1.125rem;
       line-height: 1.8;
@@ -433,9 +435,6 @@ const { about, meta } = portfolioData;
   }
 
   @media (max-width: 639px) {
-    .about-value-slot:not(:last-child) {
-      border-bottom-width: 1px;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
