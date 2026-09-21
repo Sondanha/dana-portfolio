@@ -1,36 +1,20 @@
 ---
 import portfolioData from '../../data/portfolio.json';
+import { LiquidHeroActions } from '../ui/LiquidHeroGlass';
 
 const { hero, meta } = portfolioData;
 const headlineLines = hero.headline.split('\n');
 ---
 
 <section class="relative flex min-h-[92vh] items-center overflow-hidden border-b border-[var(--color-border)] px-6" id="hero">
-  <!-- Structured backdrop: crisp white, navy grid, coral geometry -->
-  <div class="pointer-events-none absolute inset-0">
-    <div class="hero-grid absolute inset-0 bg-[linear-gradient(rgba(23,36,62,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(23,36,62,0.055)_1px,transparent_1px)] bg-[size:44px_44px] [mask-image:linear-gradient(to_bottom,black_10%,transparent_88%)]"></div>
-    <div class="hero-orbit absolute -left-[19rem] -top-[23rem] h-[42rem] w-[42rem] rounded-full border-[2px] border-[var(--color-brand-coral)] opacity-55 sm:-left-[15rem] sm:-top-[22rem] sm:h-[48rem] sm:w-[48rem]"></div>
-    <div class="hero-orbit-delayed absolute -left-[14rem] -top-[20rem] h-[38rem] w-[38rem] rounded-full border border-[var(--color-brand-coral)] opacity-25 sm:-left-[10rem] sm:-top-[18rem] sm:h-[43rem] sm:w-[43rem]"></div>
-    <div class="absolute right-[18%] top-[22%] h-24 w-24 rotate-12 border-2 border-[var(--color-brand-gold)] opacity-45"></div>
-    <div class="absolute -left-20 bottom-20 h-40 w-40 rotate-45 bg-[var(--color-brand-navy)] opacity-[0.035]"></div>
-    <img
-      src="/favicon.png"
-      alt=""
-      aria-hidden="true"
-      class="dh-float absolute -right-28 top-[22%] w-[26rem] opacity-[0.09] sm:right-[-6rem] sm:w-[34rem] lg:right-[3%] lg:w-[38rem]"
-      width="608"
-      height="608"
-    />
-  </div>
-
   <div class="relative z-10 mx-auto w-full max-w-6xl pt-20">
     <h1 class="max-w-5xl font-extrabold leading-[1.1] tracking-[-0.045em] text-[var(--color-text-primary)]">
       {headlineLines.map((line: string, index: number) => {
         const [beforeName, afterName] = line.split(meta.nameKo);
         return (
-          <span class:list={['block', index === 0 ? 'text-4xl sm:text-5xl lg:text-6xl' : 'mt-2 text-5xl sm:text-6xl lg:text-[4.8rem]']}>
+          <span class:list={['block', index === 0 ? 'text-[2.15rem] sm:text-5xl lg:text-6xl' : 'mt-2 text-[2.45rem] sm:text-6xl lg:text-[4.8rem]']}>
             {beforeName}
-            {line.includes(meta.nameKo) && <span class="text-[var(--color-accent)]">{meta.nameKo}</span>}
+            {line.includes(meta.nameKo) && <span class="hero-name">{meta.nameKo}</span>}
             {afterName}
           </span>
         );
@@ -40,6 +24,18 @@ const headlineLines = hero.headline.split('\n');
     <p class="mt-8 max-w-2xl whitespace-pre-line text-base leading-relaxed text-[var(--color-text-secondary)] sm:text-lg">
       {hero.subheadline}
     </p>
+
+    <LiquidHeroActions client:load />
   </div>
 
 </section>
+
+<style>
+  .hero-name {
+    background: linear-gradient(115deg, #c98293, var(--color-accent) 58%, var(--color-accent-hover));
+    background-clip: text;
+    color: transparent;
+    -webkit-background-clip: text;
+  }
+
+</style>

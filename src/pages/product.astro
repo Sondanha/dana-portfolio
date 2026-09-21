@@ -17,14 +17,8 @@ const productNavItems = productProjects.map((project) => ({
 >
   <Header navItems={productNavItems} />
 
-  <main class="min-h-screen overflow-hidden bg-white pb-24 pt-28 sm:pt-36">
+  <main class="page-shell min-h-screen overflow-hidden pb-24 pt-28 sm:pt-36">
     <section class="relative px-6 pb-20 sm:pb-28">
-      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute inset-0 bg-[linear-gradient(rgba(23,36,62,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(23,36,62,0.035)_1px,transparent_1px)] bg-[size:48px_48px]"></div>
-        <div class="absolute -left-24 top-6 h-72 w-72 rounded-full border-[26px] border-[var(--color-accent)] opacity-[0.06]"></div>
-        <img src="/favicon.png" alt="" class="absolute -right-20 -top-20 w-[30rem] opacity-[0.035]" width="480" height="480" />
-      </div>
-
       <div class="relative mx-auto max-w-6xl">
         <p class="text-sm font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">Products</p>
         <h1 class="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-6xl">
@@ -38,7 +32,7 @@ const productNavItems = productProjects.map((project) => ({
           {productProjects.map((project, index) => (
             <a
               href={`#${project.id}`}
-              class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              class="glass-chip inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
             >
               <span class="text-xs text-[var(--color-accent)]">{String(index + 1).padStart(2, '0')}</span>
               {project.title}
@@ -56,7 +50,7 @@ const productNavItems = productProjects.map((project) => ({
         >
           <div class:list={['relative', index % 2 === 1 && 'lg:order-2']}>
             <div class:list={[
-              'aspect-[4/3] overflow-hidden rounded-xl shadow-[0_18px_55px_rgba(23,36,62,0.08)]',
+              'liquid-card aspect-[4/3] overflow-hidden rounded-[1.5rem]',
               project.id === 'mobile-ai-product' ? 'bg-black' : 'bg-[var(--color-bg-secondary)]',
             ]}>
               <img

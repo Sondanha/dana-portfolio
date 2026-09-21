@@ -64,7 +64,7 @@ export default function ProjectCard({
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         whileHover={{ y: -4 }}
-        className={`group relative h-full overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] shadow-[0_10px_35px_rgba(42,39,94,0.06)] transition-all duration-300 hover:border-[var(--color-border-hover)] hover:shadow-[0_20px_50px_rgba(42,39,94,0.12)] ${
+        className={`liquid-card group relative h-full overflow-hidden rounded-[1.5rem] transition-all duration-300 hover:border-[var(--color-border-hover)] hover:shadow-[inset_0_1px_0_white,0_28px_70px_rgba(42,55,82,0.16)] ${
           isFeatured ? 'lg:grid lg:min-h-[360px] lg:grid-cols-[0.9fr_1.1fr]' : 'flex flex-col'
         }`}
       >

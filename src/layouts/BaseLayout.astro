@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import AmbientGlassBackground from '../components/ui/AmbientGlassBackground.astro';
 
 interface Props {
   readonly title?: string;
@@ -23,8 +24,8 @@ const siteUrl = new URL('/', Astro.site).toString();
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ffffff" />
-    <link rel="icon" type="image/png" href="/favicon-tab-bg.png" />
+    <meta name="theme-color" content="#eef2f7" />
+    <link rel="icon" type="image/svg+xml" href="/dh-logo.svg" />
 
     <script is:inline>
       console.log(
@@ -35,7 +36,7 @@ const siteUrl = new URL('/', Astro.site).toString();
   ___) | |_| | |\  | | |_| / ___ \| |\  |  _  |/ ___ \
  |____/ \___/|_| \_| |____/_/   \_\_| \_|_| |_/_/   \_\
 `,
-        'color:#c54b32;font:700 12px/1.15 ui-monospace,SFMono-Regular,Consolas,monospace;'
+        'color:#974b60;font:700 12px/1.15 ui-monospace,SFMono-Regular,Consolas,monospace;'
       );
       console.log(
         '%c[ DH / PORTFOLIO ]%c  BUSINESS × AI × PRODUCT\n> https://sondanha.pages.dev\n> Thanks for looking under the hood.',
@@ -97,6 +98,9 @@ const siteUrl = new URL('/', Astro.site).toString();
     />
   </head>
   <body class="min-h-screen antialiased">
-    <slot />
+    <AmbientGlassBackground />
+    <div class="site-content-layer">
+      <slot />
+    </div>
   </body>
 </html>

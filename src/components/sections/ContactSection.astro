@@ -1,11 +1,12 @@
 ---
 import portfolioData from '../../data/portfolio.json';
+import { LiquidContactButton } from '../ui/LiquidHeroGlass';
 
 const { contact } = portfolioData;
 ---
 
 <section class="px-6 py-24 sm:py-28" id="contact">
-  <div class="relative z-10 mx-auto grid max-w-6xl gap-10 border-y border-[var(--color-border)] py-14 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-24 lg:gap-y-8 lg:py-20">
+  <div class="liquid-panel relative z-10 mx-auto grid max-w-6xl gap-10 overflow-hidden rounded-[22px] px-7 py-12 sm:px-12 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-24 lg:gap-y-8 lg:px-16 lg:py-16">
     <div>
       <p class="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-accent)]">{contact.eyebrow}</p>
       <h2 class="mt-5 max-w-lg text-3xl font-bold leading-tight tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
@@ -20,9 +21,7 @@ const { contact } = portfolioData;
     </div>
 
     <div class="lg:col-start-1 lg:row-start-2">
-      <a href="/contact" class="inline-flex rounded-lg border border-[var(--color-accent)] bg-[var(--color-accent)] px-6 py-3 text-sm font-normal text-white transition-colors duration-200 hover:bg-white hover:text-[var(--color-accent)]">
-        Contact Me!
-      </a>
+      <LiquidContactButton icon="arrow" client:load />
     </div>
   </div>
 </section>

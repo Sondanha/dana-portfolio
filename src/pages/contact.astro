@@ -11,14 +11,8 @@ const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeU
   <Header navItems={[]} />
 
   <main class="contact-page relative flex min-h-screen items-center overflow-hidden px-5 pb-12 pt-28 sm:px-8 sm:pb-16 sm:pt-32">
-    <div class="pointer-events-none absolute inset-0">
-      <div class="absolute inset-0 bg-[linear-gradient(rgba(23,36,62,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(23,36,62,0.04)_1px,transparent_1px)] bg-[size:48px_48px]"></div>
-      <div class="absolute -left-28 top-10 h-80 w-80 rounded-full border-[32px] border-[var(--color-brand-coral)] opacity-[0.07]"></div>
-      <img src="/favicon.png" alt="" aria-hidden="true" class="absolute -right-24 bottom-[-5rem] w-[34rem] opacity-[0.055] sm:right-[2%] sm:w-[42rem]" width="672" height="672" />
-    </div>
-
-    <div class="relative z-10 mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white shadow-[0_28px_90px_rgba(23,36,62,0.13)]">
-      <a href="/" class="absolute right-5 top-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-text-secondary)] shadow-sm transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]" aria-label="포트폴리오로 돌아가기">
+    <div class="liquid-panel relative z-10 mx-auto w-full max-w-3xl overflow-hidden rounded-[22px]">
+      <a href="/" class="glass-chip absolute right-5 top-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]" aria-label="포트폴리오로 돌아가기">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-width="1.8" d="m6 6 12 12M18 6 6 18" />
         </svg>
@@ -34,14 +28,14 @@ const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeU
         <p class="mt-4 text-sm text-[var(--color-text-secondary)]">메일 주소를 복사하거나 Gmail에서 바로 연락할 수 있습니다.</p>
 
         <div class="mt-10 grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
-          <button type="button" data-copy-email data-email={meta.email} class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-3 text-sm font-normal text-white transition-colors hover:bg-white hover:text-[var(--color-accent)]">
+          <button type="button" data-copy-email data-email={meta.email} class="tinted-glass inline-flex w-full items-center justify-center gap-2 rounded-full border px-5 py-3 text-sm font-normal text-white transition-colors">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <rect x="8" y="8" width="11" height="11" rx="2" stroke-width="1.8" />
               <path stroke-linecap="round" stroke-width="1.8" d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
             </svg>
             <span data-copy-email-label>{contact.emailLabel}</span>
           </button>
-          <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--color-border)] px-5 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
+          <a href={gmailComposeUrl} target="_blank" rel="noopener noreferrer" class="glass-chip inline-flex w-full items-center justify-center gap-2 rounded-full border px-5 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6.5h16v11H4zM4 7l8 6 8-6" />
             </svg>

@@ -1,5 +1,6 @@
 ---
 import portfolioData from '../../data/portfolio.json';
+import AboutGlassSurface from '../ui/AboutGlassSurface';
 
 const { about, meta } = portfolioData;
 ---
@@ -33,13 +34,10 @@ const { about, meta } = portfolioData;
       </div>
 
       <div class="about-values-wrap relative">
-        <div class="about-card-shapes" aria-hidden="true">
-          <span class="about-shape about-shape-square"></span>
-          <span class="about-shape about-shape-triangle"></span>
-          <span class="about-shape about-shape-diamond"></span>
+        <div class="about-refraction-stage" aria-hidden="true">
+          <AboutGlassSurface client:load />
         </div>
-
-        <ol class="about-values-grid relative z-10 grid h-full overflow-hidden rounded-xl border border-[var(--color-border)] bg-transparent sm:grid-cols-2" data-about-grid>
+        <ol class="about-values-grid relative z-10 grid h-full overflow-hidden rounded-[36px] sm:grid-cols-2" data-about-grid>
           {about.values.map((value, index) => (
             <li class="about-value-slot relative min-h-48">
               <article class="about-value-card" tabindex="0" data-about-card>
@@ -136,57 +134,41 @@ const { about, meta } = portfolioData;
 <style>
   .about-values-grid {
     grid-auto-rows: 1fr;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: transparent;
+  }
+
+  .about-refraction-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 36px;
+    pointer-events: none;
+  }
+
+  .about-refraction-stage :global(astro-island) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(.about-refraction-surface) {
+    --lq-tint: rgba(247, 252, 255, 0.08);
+    --lq-tint-deep: rgba(13, 27, 54, 0.025);
+    --lq-rim-hi: rgba(255, 255, 255, 0.96);
+    --lq-rim-lo: rgba(154, 200, 236, 0.34);
+    --lq-highlight: rgba(255, 255, 255, 0.78);
+    --lq-shadow: 0 24px 64px rgba(31, 48, 76, 0.12), 0 3px 10px rgba(184, 95, 115, 0.08);
+    width: 100%;
+    height: 100%;
   }
 
   .about-values-wrap {
     isolation: isolate;
   }
 
-  .about-card-shapes {
-    position: absolute;
-    inset: -3rem;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .about-shape {
-    position: absolute;
-    display: block;
-  }
-
-  .about-shape-square {
-    top: 0.75rem;
-    right: -1rem;
-    width: 11rem;
-    height: 11rem;
-    border: 2px solid rgba(23, 36, 62, 0.08);
-    border-radius: 1.75rem;
-    transform: rotate(14deg);
-  }
-
-  .about-shape-triangle {
-    bottom: -1rem;
-    left: -0.5rem;
-    width: 12rem;
-    height: 11rem;
-    background: rgba(232, 93, 63, 0.055);
-    clip-path: polygon(50% 0, 100% 100%, 0 100%);
-    transform: rotate(-12deg);
-  }
-
-  .about-shape-diamond {
-    right: 35%;
-    bottom: -2.25rem;
-    width: 7rem;
-    height: 7rem;
-    border: 2px solid rgba(242, 184, 75, 0.13);
-    border-radius: 1rem;
-    transform: rotate(45deg);
-  }
-
   .about-value-slot {
-    border-color: var(--color-border);
+    border-color: rgba(255, 255, 255, 0.42);
     transition: border-color 650ms ease;
   }
 
@@ -207,7 +189,10 @@ const { about, meta } = portfolioData;
     height: 100%;
     overflow: hidden;
     border: 1px solid transparent;
-    background: transparent;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 1px 0 0 rgba(255, 255, 255, 0.08);
     padding: 1.75rem;
     transition:
       left 900ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -221,19 +206,19 @@ const { about, meta } = portfolioData;
   }
 
   .about-value-slot:nth-child(1) .about-value-card {
-    border-top-left-radius: 0.7rem;
+    border-top-left-radius: 36px;
   }
 
   .about-value-slot:nth-child(2) .about-value-card {
-    border-top-right-radius: 0.7rem;
+    border-top-right-radius: 36px;
   }
 
   .about-value-slot:nth-child(3) .about-value-card {
-    border-bottom-left-radius: 0.7rem;
+    border-bottom-left-radius: 36px;
   }
 
   .about-value-slot:nth-child(4) .about-value-card {
-    border-bottom-right-radius: 0.7rem;
+    border-bottom-right-radius: 36px;
   }
 
   .about-value-card::after {
@@ -242,7 +227,7 @@ const { about, meta } = portfolioData;
     bottom: 1.15rem;
     left: 1.75rem;
     height: 2px;
-    background: linear-gradient(90deg, var(--color-brand-coral), var(--color-brand-gold));
+    background: linear-gradient(90deg, var(--color-brand-navy), var(--color-brand-coral));
     content: '';
     opacity: 0;
     transform: scaleX(0);
@@ -251,9 +236,11 @@ const { about, meta } = portfolioData;
 
   .about-value-card.is-hovered {
     z-index: 5;
-    border-color: rgba(232, 93, 63, 0.92);
-    background: transparent;
-    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.76);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.035));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.72),
+      0 18px 44px rgba(31, 48, 76, 0.1);
   }
 
   .about-value-card.is-hovered::after {
@@ -263,10 +250,14 @@ const { about, meta } = portfolioData;
 
   .about-value-card.is-expanded {
     z-index: 20;
-    border-color: rgba(232, 93, 63, 0.95);
-    border-radius: 0.7rem;
-    background: transparent;
-    box-shadow: 0 22px 60px rgba(23, 36, 62, 0.14);
+    border-color: rgba(255, 255, 255, 0.82);
+    border-radius: 36px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(231, 238, 247, 0.045));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.88),
+      0 24px 65px rgba(31, 48, 76, 0.14);
+    backdrop-filter: blur(20px) saturate(165%) contrast(1.03);
+    -webkit-backdrop-filter: blur(20px) saturate(165%) contrast(1.03);
   }
 
   .about-value-card.is-expanded::after {

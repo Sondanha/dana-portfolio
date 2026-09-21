@@ -73,8 +73,8 @@ export default function AnimatedTimeline({ items }: AnimatedTimelineProps): Reac
                 onClick={() => setActiveFilter(filter.value)}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 ${
                   isActive
-                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_8px_20px_rgba(197,75,50,0.16)]'
-                    : 'border-[var(--color-border)] bg-transparent text-[var(--color-text-secondary)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]'
+                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_8px_20px_rgba(184,95,115,0.2)]'
+                    : 'glass-chip border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]'
                 }`}
               >
                 {filter.label}
