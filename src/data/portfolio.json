@@ -48,7 +48,8 @@
       "title": "A-Voice Chat",
       "category": "Product",
       "description": "고품질 성우 음성 기반 AI 캐릭터 보이스챗. 10월 초 베타테스트 후 11월 초 Google Play Store와 App Store 정식 출시 예정입니다.",
-      "tags": ["Product Strategy", "AI", "Mobile"],
+      "period": "2026.10 - (예정됨)",
+      "tags": ["B2C", "voice chat", "AI character", "AI Game", "App"],
       "thumbnail": "/images/projects/a-voice-chat-logo-mint.png",
       "thumbnailPosition": "center",
       "links": {
@@ -65,7 +66,8 @@
       "title": "에틱스타",
       "category": "Product",
       "description": "청소년을 위한 AI 윤리 리터러시 학습 웹 보드게임. 런칭 준비 중입니다.",
-      "tags": ["B2B", "Product Design", "Web"],
+      "period": "2027 (예정됨)",
+      "tags": ["B2G", "voice chat", "AI character", "AI Game", "Web"],
       "thumbnail": "/images/projects/etikstar-boardgame.png",
       "thumbnailPosition": "center",
       "links": {

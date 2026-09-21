@@ -233,13 +233,11 @@ const marqueeTools = capabilities.flatMap((capability) => capability.tools);
     max-height: 2.25rem;
     object-fit: contain;
     opacity: 0.68;
-    filter: grayscale(1);
-    transition: opacity 180ms ease, filter 180ms ease, transform 180ms ease;
+    transition: opacity 180ms ease, transform 180ms ease;
   }
 
   .skills-logo-group li:hover img {
     opacity: 1;
-    filter: grayscale(0);
     transform: translateY(-2px);
   }
 
