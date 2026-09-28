@@ -1,0 +1,248 @@
+---
+import portfolioData from '../../data/portfolio.json';
+import AboutGlassSurface from '../ui/AboutGlassSurface';
+
+const { meta } = portfolioData;
+
+const productFlow = [
+  {
+    number: '01',
+    title: '제품의 방향을 정합니다',
+    description: '사용자가 왜 선택하고, 제품이 어떻게 지속될지를 비즈니스와 사용자 관점에서 먼저 봅니다.',
+  },
+  {
+    number: '02',
+    title: '경험과 시스템을 함께 설계합니다',
+    description: '보이는 화면뿐 아니라 데이터, 권한, 비용과 운영 흐름까지 하나의 제품 구조로 연결합니다.',
+  },
+  {
+    number: '03',
+    title: '작동하는 제품까지 구현합니다',
+    description: '프론트엔드부터 API와 배포 환경까지 직접 다루며 아이디어를 실제 사용할 수 있는 상태로 만듭니다.',
+  },
+  {
+    number: '04',
+    title: '운영에서 다시 배웁니다',
+    description: '출시를 끝이 아닌 시작으로 보고, 사용 경험과 운영 과정에서 얻은 판단을 다음 개선에 반영합니다.',
+  },
+] as const;
+---
+
+<section class="about-flow px-6 py-[var(--spacing-section)]" id="about">
+  <div class="mx-auto max-w-6xl">
+    <div class="about-heading">
+      <div>
+        <p class="section-label">About</p>
+        <h2>기획과 개발을<br /><span>하나의 흐름</span>으로 봅니다.</h2>
+      </div>
+      <div class="about-intro">
+        <p class="about-discipline">Business <span>×</span> Product <span>×</span> Engineering</p>
+        <a href={meta.velog} target="_blank" rel="noopener noreferrer">
+          더 긴 생각 보기
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="flow-shell">
+      <div class="flow-glass" aria-hidden="true">
+        <AboutGlassSurface client:load className="about-flow-glass" radius={36} />
+      </div>
+
+      <ol class="flow-list">
+        {productFlow.map((item) => (
+          <li class="flow-row">
+            <span class="flow-number">{item.number}</span>
+            <div class="flow-copy">
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-flow {
+    color: var(--color-text-primary);
+  }
+
+  .about-heading {
+    display: grid;
+    gap: 2.5rem;
+    align-items: end;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-label {
+    margin: 0 0 1rem;
+    color: var(--color-accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .about-heading h2 {
+    margin: 0;
+    font-size: clamp(2.5rem, 5.1vw, 5.2rem);
+    font-weight: 650;
+    letter-spacing: -0.06em;
+    line-height: 1.02;
+  }
+
+  .about-heading h2 span {
+    color: var(--color-accent);
+  }
+
+  .about-intro {
+    padding-bottom: 0.35rem;
+  }
+
+  .about-intro p {
+    max-width: 30rem;
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .about-intro .about-discipline {
+    color: var(--color-text-primary);
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    font-weight: 750;
+    letter-spacing: -0.025em;
+  }
+
+  .about-discipline span {
+    margin-inline: 0.3rem;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  .about-intro a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 1.25rem;
+    color: var(--color-accent);
+    font-size: 0.84rem;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .flow-shell {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 36px;
+    box-shadow: 0 28px 72px rgba(31, 48, 76, 0.1);
+  }
+
+  .flow-glass {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .flow-glass :global(astro-island) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(.about-flow-glass) {
+    --lq-tint: rgba(247, 252, 255, 0.08);
+    --lq-tint-deep: rgba(13, 27, 54, 0.028);
+    --lq-rim-hi: rgba(255, 255, 255, 0.98);
+    --lq-rim-lo: rgba(154, 200, 236, 0.34);
+    --lq-highlight: rgba(255, 255, 255, 0.84);
+    --lq-shadow: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  .flow-list {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .flow-row {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+    padding: 2rem 2.25rem;
+    border-bottom: 1px solid rgba(13, 27, 54, 0.1);
+    transition: background 220ms ease, padding 260ms var(--ease-out-expo);
+  }
+
+  .flow-row:hover {
+    padding-left: 2.75rem;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .flow-number {
+    color: var(--color-text-tertiary);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+  }
+
+  .flow-number {
+    padding-top: 0.05rem;
+    font-size: clamp(1.55rem, 3vw, 2.35rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    opacity: 0.58;
+  }
+
+  .flow-copy h3 {
+    margin: 0;
+    font-size: clamp(1.15rem, 2vw, 1.55rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .flow-copy p {
+    max-width: 39rem;
+    margin: 0.55rem 0 0;
+    color: var(--color-text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  @media (min-width: 800px) {
+    .about-heading {
+      grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.65fr);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .flow-row {
+      grid-template-columns: 3.25rem minmax(0, 1fr);
+      gap: 0.8rem;
+      padding: 1.55rem 1.25rem;
+    }
+
+    .flow-row:hover {
+      padding-left: 1.25rem;
+    }
+
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flow-row { transition: none; }
+  }
+</style>
